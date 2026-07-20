@@ -6,7 +6,7 @@ async function loadDashboard() {
 
     const res = await fetch(
 
-        "http://localhost:3000/api/farmer-dashboard",
+        "https://a-s-ventures-backend.onrender.com/api/farmer-dashboard",
 
         {
 
@@ -90,7 +90,7 @@ async function updateStatus(id, status) {
 
     const res = await fetch(
 
-        `http://localhost:3000/api/farmer-dashboard/${id}/status`,
+        `https://a-s-ventures-backend.onrender.com/api/farmer-dashboard/${id}/status`,
 
         {
 

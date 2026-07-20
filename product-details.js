@@ -4,7 +4,7 @@ const productId = params.get("id");
 
 async function getProducts() {
 
-    const res = await fetch(`/api/products/${productId}`);
+    const res = await fetch(`https://a-s-ventures-backend.onrender.com/api/products/${productId}`);
 
     const product = await res.json();
 

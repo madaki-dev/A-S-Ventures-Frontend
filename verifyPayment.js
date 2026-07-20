@@ -8,7 +8,7 @@ async function verify() {
 
     const res = await fetch(
 
-        `/api/payment/verify/${transactionId}`,
+        `https://a-s-ventures-backend.onrender.com/api/payment/verify/${transactionId}`,
         {
             headers: {
 

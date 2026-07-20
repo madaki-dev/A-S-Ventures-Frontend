@@ -2,7 +2,7 @@ const token = localStorage.getItem("token");
 
 async function loadOrders() {
 
-    const res = await fetch("/api/orders/my-orders", {
+    const res = await fetch("https://a-s-ventures-backend.onrender.com/api/orders/my-orders", {
 
         headers: {
 

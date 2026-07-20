@@ -8,7 +8,7 @@ async function loadDashboard() {
 
     const res = await fetch(
 
-        "http://localhost:3000/api/admin/dashboard",
+        "https://a-s-ventures-backend.onrender.com/api/admin/dashboard",
 
         {
 
@@ -42,7 +42,7 @@ async function loadOrders() {
 
     const res = await fetch(
 
-        "/api/admin/orders",
+        "https://a-s-ventures-backend.onrender.com/api/admin/orders",
 
         {
 

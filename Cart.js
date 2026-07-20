@@ -1,6 +1,6 @@
 const token = localStorage.getItem("token");
 
-const res = await fetch("/api/cart", {
+const res = await fetch("https://a-s-ventures-backend.onrender.com/api/cart", {
 
     headers: {
 
@@ -52,7 +52,7 @@ async function removeItem(id) {
 
     const token = localStorage.getItem("token");
 
-    await fetch(`/api/cart/${id}`, {
+    await fetch(`https://a-s-ventures-backend.onrender.com/api/cart/${id}`, {
 
         method: "DELETE",
 
@@ -75,7 +75,7 @@ async function checkout() {
 
     const amount = calculateTotal();
 
-    const res = await fetch("/api/payment/initialize", {
+    const res = await fetch("https://a-s-ventures-backend.onrender.com/api/payment/initialize", {
 
         method: "POST",
 

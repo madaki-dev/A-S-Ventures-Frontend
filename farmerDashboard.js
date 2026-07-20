@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    const res = await fetch("/api/profile", {
+    const res = await fetch("https://a-s-ventures-backend.onrender.com/api/profile", {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -23,7 +23,7 @@ async function updateStatus(id, status) {
 
     const token = localStorage.getItem("token");
 
-    const res = await fetch(`/api/orders/${id}/status`, {
+    const res = await fetch(`https://a-s-ventures-backend.onrender.com/api/orders/${id}/status`, {
 
         method: "PATCH",
 

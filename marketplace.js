@@ -33,7 +33,7 @@ async function addToCart(productId) {
 
     const token = localStorage.getItem("token");
 
-    const res = await fetch("/api/cart", {
+    const res = await fetch("https://a-s-ventures-backend.onrender.com/api/cart", {
 
         method: "POST",
 
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    const res = await fetch("/api/profile", {
+    const res = await fetch("https://a-s-ventures-backend.onrender.com/api/profile", {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function getProducts() {
 
-    const res = await fetch("/api/products");
+    const res = await fetch("https://a-s-ventures-backend.onrender.com/api/products");
 
     const products = await res.json();
 

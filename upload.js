@@ -20,7 +20,7 @@ formData.append("location", locationInput.value);
 formData.append("description", description.value);
 formData.append("image", image.files[0]);
 
-const res = await fetch("/api/products", {
+const res = await fetch("https://a-s-ventures-backend.onrender.com/api/products", {
 
     method: "POST",
 
