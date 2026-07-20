@@ -1,0 +1,70 @@
+body {
+
+    font-family: Arial;
+
+    margin: 40px;
+
+    background: linear-gradient(to bottom, #187c31, #075221);
+
+}
+
+.cards {
+
+    display: flex;
+
+    gap: 20px;
+
+    margin-bottom: 40px;
+
+}
+
+.card {
+
+    background: rgb(5, 70, 19);
+
+    padding: 20px;
+
+    width: 250px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 6px 19px rgba(58, 255, 134, 0.548);
+
+    text-align: center;
+
+}
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: white;
+
+}
+
+th,
+td {
+
+    padding: 15px;
+
+    border: 1px solid #ddd;
+
+    text-align: center;
+
+}
+
+th {
+
+    background: #1d7a2e;
+
+    color: rgb(147, 253, 188);
+
+}
+
+tr:nth-child(even) {
+
+    background: #0c7726;
+
+}

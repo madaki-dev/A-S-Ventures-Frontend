@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload Product | A&S Ventures</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <h2>A&S Ventures</h2>
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="marketplace.html">Marketplace</a></li>
+      <li><a href="farmer-dashboard.html">Dashboard</a></li>
+      <li><a href="orders.html">Orders</a></li>
+    </ul>
+  </nav>
+
+  <section class="upload-section">
+    <div class="upload-card">
+      <h1>Upload Product</h1>
+
+      <form>
+        <input type="text" placeholder="Product Name" id="productName" required />
+
+        <select id="category" required>
+          <option>Select Category</option>
+          <option>Grains</option>
+          <option>Legumes</option>
+          <option>Tubers</option>
+          <option>Vegetables</option>
+          <option>Fruits</option>
+        </select>
+
+        <input type="number" placeholder="Price" id="price" required />
+
+        <input type="number" placeholder="Quantity Available" id="quantity" required />
+
+        <input type="text" placeholder="Location" id="location" required />
+
+        <input type="file" id="image" required />
+
+        <textarea placeholder="Product Description" id="description" required></textarea>
+
+        <button type="submit">Upload Product</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <h3>A&S Ventures</h3>
+      <p>Connecting Farmers, Buyers & Markets.</p>
+    </div>
+  </footer>
+  <script src="upload.js"></script>
+</body>
+
+</html>

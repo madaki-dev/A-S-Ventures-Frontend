@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Buyer Checkout | A&S Ventures</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #004d00, #66cc66);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .checkout-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .checkout-container::before {
+            content: "";
+            position: absolute;
+            top: -40px;
+            left: -40px;
+            width: 100px;
+            height: 100px;
+            background: rgba(0, 128, 0, 0.3);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .checkout-container::after {
+            content: "";
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 200, 0, 0.3);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        input,
+        select {
+            background: #fff;
+            color: #333;
+        }
+
+        button {
+            background: #006600;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #009900;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="checkout-container">
+        <h1>Buyer Checkout</h1>
+        <form id="checkoutForm">
+            <input type="text" id="fullname" placeholder="Full Name" required />
+            <input type="tel" id="phone" placeholder="Phone Number" required />
+            <input type="tel" id="whatsapp" placeholder="WhatsApp Number" required />
+            <select id="state" required>
+                <option value="">Select Location</option>
+                <option value="Lagos">Lagos</option>
+                <option value="Abuja">Abuja</option>
+                <option value="Edo">Edo</option>
+                <option value="Abia">Abia</option>
+                <option value="Adamawa">Adamawa</option>
+                <option value="Akwa Ibom">Akwa Ibom</option>
+                <option value="Anambra">Anambra</option>
+                <option value="Bauchi">Bauchi</option>
+                <option value="Bayelsa">Bayelsa</option>
+                <option value="Benue">Benue</option>
+                <option value="Borno">Borno</option>
+                <option value="Cross River">Cross River</option>
+                <option value="Delta">Delta</option>
+                <option value="Ebonyi">Ebonyi</option>
+                <option value="Edo">Edo</option>
+                <option value="Ekiti">Ekiti</option>
+                <option value="Enugu">Enugu</option>
+                <option value="Gombe">Gombe</option>
+                <option value="Imo">Imo</option>
+                <option value="Jigawa">Jigawa</option>
+                <option value="Kaduna">Kaduna</option>
+                <option value="Kano">Kano</option>
+                <option value="Katsina">Katsina</option>
+                <option value="Kebbi">Kebbi</option>
+                <option value="Kogi">Kogi</option>
+                <option value="Kwara">Kwara</option>
+                <option value="Nasarawa">Nasarawa</option>
+                <option value="Niger">Niger</option>
+                <option value="Ogun">Ogun</option>
+                <option value="Ondo">Ondo</option>
+                <option value="Osun">Osun</option>
+                <option value="Oyo">Oyo</option>
+                <option value="Plateau">Plateau</option>
+                <option value="Rivers">Rivers</option>
+                <option value="Sokoto">Sokoto</option>
+                <option value="Taraba">Taraba</option>
+                <option value="Yobe">Yobe</option>
+                <option value="Zamfara">Zamfara</option>
+            </select>
+            <button type="submit">Proceed to Payment</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById("checkoutForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const fullname = document.getElementById("fullname").value;
+            const phone = document.getElementById("phone").value;
+            const whatsapp = document.getElementById("whatsapp").value;
+            const state = document.getElementById("state").value;
+
+            if (!fullname || !phone || !whatsapp || !state) {
+                alert("All fields are required!");
+                return;
+            }
+
+            const token = localStorage.getItem("token");
+            const user = JSON.parse(localStorage.getItem("user"));
+            const amount = calculateTotal(); // your existing function
+
+            const res = await fetch("/api/payment/initialize", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ amount, email: user.email, fullname, phone, whatsapp, state })
+            });
+
+            const data = await res.json();
+            window.location.href = data.paymentLink;
+        });
+    </script>
+</body>
+
+</html>

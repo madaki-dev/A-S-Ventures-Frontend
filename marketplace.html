@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marketplace | A&S Ventures</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <h2>A&S Ventures</h2>
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="marketplace.html">Marketplace</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+
+    <div class="nav-buttons">
+      <a href="login.html" class="login-btn"> Login </a>
+
+      <div class="dropdown">
+        <button class="get-started">
+          Get Started
+          <i class="fas fa-chevron-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="farmer-register.html"> Account Registration </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="marketplace-header">
+    <h1>Agricultural Marketplace</h1>
+
+    <p>
+      Find trusted farmers and quality agricultural products across Nigeria.
+    </p>
+  </section>
+
+  <section class="search-section">
+    <input type="text" id="searchInput" placeholder="Search products..." />
+  </section>
+
+  <section class="categories">
+    <button class="category-btn">All</button>
+    <button class="category-btn">Grains</button>
+    <button class="category-btn">Legumes</button>
+    <button class="category-btn">Tubers</button>
+    <button class="category-btn">Vegetables</button>
+    <button class="category-btn">Fruits</button>
+  </section>
+
+  <section class="products-section">
+    <div id="productGrid" class="product-grid"></div>
+    <a href="product-details.html?id=${product._id}" class="view-btn">
+      View Details
+    </a>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div>
+        <h3>A&S Ventures</h3>
+
+        <p>Connecting Farmers, Buyers & Markets.</p>
+      </div>
+
+      <div>
+        <h4>Quick Links</h4>
+
+        <a href="index.html">Home</a>
+        <a href="marketplace.html">Marketplace</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+
+        <p>as.logistics.td@gmail.com</p>
+        <p>+234 8023799337</p>
+        <p>+234 9043268594</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="marketplace.js"></script>
+</body>
+
+</html>

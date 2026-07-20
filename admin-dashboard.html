@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet" href="admin-dashboard.css">
+
+</head>
+
+<body>
+
+    <h1>A&S Logistics Admin Dashboard</h1>
+
+    <div class="cards">
+
+        <div class="card">
+
+            <h3>Total Sales</h3>
+
+            <h2 id="sales">₦0</h2>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Total Orders</h3>
+
+            <h2 id="orders">0</h2>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Commission Earned</h3>
+
+            <h2 id="commission">₦0</h2>
+
+        </div>
+
+    </div>
+
+    <h2>Marketplace Orders</h2>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Buyer</th>
+
+                <th>Farmer</th>
+
+                <th>Product</th>
+
+                <th>Qty</th>
+
+                <th>Farmer Price</th>
+
+                <th>Commission</th>
+
+                <th>Transport</th>
+
+                <th>Total Paid</th>
+
+                <th>Status</th>
+
+                <th>Date</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody id="ordersTable">
+
+        </tbody>
+
+    </table>
+
+    <script src="admin-dashboard.js"></script>
+
+</body>
+
+</html>
