@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (user.role === "Admin") {
             const nav = document.getElementById("nav-links");
-            nav.innerHTML += `<li><a href="/admin-dashboard.html">Admin Dashboard</a></li>`;
+            nav.innerHTML += `<li><a href="admin-dashboard.html">Admin Dashboard</a></li>`;
         }
     } catch (error) {
         console.error("Error fetching profile:", error);
