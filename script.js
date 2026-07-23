@@ -70,8 +70,26 @@ farmerForm.addEventListener("submit", async (e) => {
         );
 
         window.location.href =
-            "marketplace.html";
+            "Profile.html";
     } else {
         alert(data.message);
+    }
+});
+document.addEventListener("DOMContentLoaded", async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+        const res = await fetch("https://a-s-ventures-backend.onrender.com/api/admin", {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const user = await res.json();
+
+        if (user.role === "Admin") {
+            const nav = document.getElementById("nav-links");
+            nav.innerHTML += `<li><a href="/admin-dashboard.html">Admin Dashboard</a></li>`;
+        }
+    } catch (error) {
+        console.error("Error fetching profile:", error);
     }
 });

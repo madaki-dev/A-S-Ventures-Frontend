@@ -28,9 +28,9 @@ loginForm.addEventListener("submit", async (e) => {
             localStorage.setItem("accountType", data.accountType);
 
             if (data.accountType === "buyer") {
-                window.location.href = "marketplace.html";
+                window.location.href = "Profile.html";
             } else if (data.accountType === "farmer") {
-                window.location.href = "farmer-dashboard.html";
+                window.location.href = "Profile.html";
             } else {
                 alert(data.message);
             }
