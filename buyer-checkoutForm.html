@@ -152,7 +152,7 @@
             const user = JSON.parse(localStorage.getItem("user"));
             const amount = calculateTotal(); // your existing function
 
-            const res = await fetch("/api/payment/initialize", {
+            const res = await fetch("https://a-s-ventures-backend.onrender.com/api/payment/initialize", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
