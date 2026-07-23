@@ -26,14 +26,7 @@ loginForm.addEventListener("submit", async (e) => {
         if (response.ok) {
             localStorage.setItem("token", data.token);
             localStorage.setItem("accountType", data.accountType);
-
-            if (data.accountType === "buyer") {
-                window.location.href = "Profile.html";
-            } else if (data.accountType === "farmer") {
-                window.location.href = "Profile.html";
-            } else {
-                alert(data.message);
-            }
+            window.location.href = "Profile.html";
         }
     } catch (error) {
         console.log(error);
