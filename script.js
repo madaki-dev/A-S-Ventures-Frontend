@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!token) return;
 
     try {
-        const res = await fetch("https://a-s-ventures-backend.onrender.com/api/admin", {
+        const res = await fetch("https://a-s-ventures-backend.onrender.com/api/profile", {
             headers: { Authorization: `Bearer ${token}` }
         });
         const user = await res.json();
