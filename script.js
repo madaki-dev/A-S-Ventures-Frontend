@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const user = await res.json();
 
         if (user.role === "Admin") {
-            const nav = document.getElementById("nav-links");
+            const nav = document.getElementById("navLinks");
             nav.innerHTML += `<li><a href="admin-dashboard.html">Admin Dashboard</a></li>`;
         }
     } catch (error) {
