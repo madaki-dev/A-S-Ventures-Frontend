@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #003300, #66cc66);
+            background: linear-gradient(135deg, #003300, #0a420a);
             color: #fff;
             margin: 0;
             padding: 0;
@@ -68,7 +68,7 @@
         }
 
         button {
-            background: #006600;
+            background: #103510;
             color: #fff;
             font-weight: bold;
             cursor: pointer;
@@ -88,6 +88,8 @@
             <input type="text" id="farmerName" placeholder="Full Name" required />
             <input type="tel" id="farmerPhone" placeholder="Phone Number" required />
             <input type="text" id="accountNumber" placeholder="Bank Account Number" required />
+            <input type="text" id="bankName" placeholder="Bank Name" required />
+            <input type="text" id="accountName" placeholder="Bank Account Name" required />
             <button type="submit">Confirm & Accept Order</button>
         </form>
     </div>
@@ -97,8 +99,10 @@
         const farmerName = document.getElementById("farmerName").value;
         const farmerPhone = document.getElementById("farmerPhone").value;
         const accountNumber = document.getElementById("accountNumber").value;
+        const bankName = document.getElementById("bankName").value;
+        const accountName = document.getElementById("accountName").value;
 
-        if (!farmerName || !farmerPhone || !accountNumber) {
+        if (!farmerName || !farmerPhone || !accountNumber || !bankName || !accountName) {
             alert("Please fill all fields before accepting the order.");
             return;
         }
@@ -111,7 +115,7 @@
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`
             },
-            body: JSON.stringify({ status, farmerName, farmerPhone, accountNumber })
+            body: JSON.stringify({ status, farmerName, farmerPhone, accountNumber, bankName, accountName })
         });
 
         const data = await res.json();

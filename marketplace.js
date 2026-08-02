@@ -15,9 +15,10 @@ function renderProducts(products) {
         <img src="${imgSrc}" alt="${product.productName}">
         <h3>${product.productName}</h3>
         <p>${product.location}</p>
-        <h4>₦${product.sellingPrice}/Ton</h4>
+        <h4>₦${product.sellingPrice}/Bag</h4>
         <p>Quantity: ${product.quantity}</p>
         <button onclick="addToCart('${product._id}')">Add To Cart</button>
+        <a href="product-details.html">See product details</a>
       </div>
     `;
     });
