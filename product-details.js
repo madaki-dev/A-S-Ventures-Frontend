@@ -1,49 +1,129 @@
 const params = new URLSearchParams(window.location.search);
-
 const productId = params.get("id");
 
-async function getProducts() {
+console.log("PRODUCT ID:", productId);
 
-    const res = await fetch(`https://a-s-ventures-backend.onrender.com/api/products/${productId}`);
+async function getProduct() {
 
-    const product = await res.json();
+    try {
 
-    const container = document.getElementById("productGrid")
+        if (!productId) {
+            console.error("No product ID in URL");
+            return;
+        }
 
-    container.innerHTML = "";
+        const res = await fetch(
+            `https://a-s-ventures-backend.onrender.com/api/products/${productId}`
+        );
 
-    product.forEach(product => {
+        console.log("STATUS:", res.status);
 
-        container.innerHTML += `
+        const product = await res.json();
+
+        console.log("PRODUCT:", product);
+
+        if (!res.ok) {
+            throw new Error(product.message);
+        }
+
+        const container = document.getElementById("productGrid");
+
+        if (!container) {
+            console.error("productGrid not found");
+            return;
+        }
+
+        container.innerHTML = `
+        
             <div class="product-image">
-                <img src="/uploads/${product.image}" alt="Product" />
+
+                <img
+                    src="${product.image}"
+                    alt="${product.productName}"
+                >
+
             </div>
 
+
             <div class="product-info">
-                <span class="product-category">${product.category}</span>
 
-                <h1>${product.productName}</h1>
+                <span class="product-category">
+                    ${product.category}
+                </span>
 
-                <h2>${product.sellingPrice}/${product.quantity}</h2>
+                <h1>
+                    ${product.productName}
+                </h1>
 
-                <p>📍${product.location}</p>
+                <h2>
+                    ₦${Number(product.sellingPrice).toLocaleString()}
+                </h2>
+
+                <p>
+                    📍 ${product.location}
+                </p>
 
                 <p>
                     ${product.description}
                 </p>
 
-            <div class="product-meta">
-                <div>
-                    <strong>Available Quantity</strong>
-                    <p>${product.stock}</p>
+
+                <div class="product-meta">
+
+                    <div>
+                        <strong>
+                            Available Quantity
+                        </strong>
+
+                        <p>
+                            ${product.stock}
+                        </p>
+                    </div>
+
+
+                    <div>
+                        <strong>
+                            Supplier
+                        </strong>
+
+                        <p>
+                            ${product.farmer?.fullName || "Unknown"}
+                        </p>
+                    </div>
+
                 </div>
 
-            <div>
-                <strong>Supplier</strong>
-                <p>${product.farmer.fullName}</p>
+
+                <div class="product-actions">
+
+                    <a href="orders.html?id=${product._id}">
+                        <button class="primary-btn">
+                            Place Order
+                        </button>
+                    </a>
+
+                    <a href="marketplace.html">
+                        <button class="secondary-btn">
+                            Back To Marketplace
+                        </button>
+                    </a>
+
+                </div>
+
             </div>
-            </div>
-            </div>
-      `;
-    });
+
+        `;
+
+        console.log("Product successfully displayed!");
+
+    } catch (error) {
+
+        console.error(
+            "ERROR LOADING PRODUCT:",
+            error
+        );
+
+    }
 }
+
+getProduct();

@@ -87,14 +87,16 @@
     <div class="checkout-container">
         <h1>Buyer Checkout</h1>
         <form id="checkoutForm">
+
             <input type="text" id="fullname" placeholder="Full Name" required />
+
             <input type="tel" id="phone" placeholder="Phone Number" required />
+
             <input type="tel" id="whatsapp" placeholder="WhatsApp Number" required />
+
             <select id="state" required>
-                <option value="">Select Location</option>
-                <option value="Lagos">Lagos</option>
-                <option value="Abuja">Abuja</option>
-                <option value="Edo">Edo</option>
+                <option value="">Select Delivery State</option>
+
                 <option value="Abia">Abia</option>
                 <option value="Adamawa">Adamawa</option>
                 <option value="Akwa Ibom">Akwa Ibom</option>
@@ -118,6 +120,7 @@
                 <option value="Kebbi">Kebbi</option>
                 <option value="Kogi">Kogi</option>
                 <option value="Kwara">Kwara</option>
+                <option value="Lagos">Lagos</option>
                 <option value="Nasarawa">Nasarawa</option>
                 <option value="Niger">Niger</option>
                 <option value="Ogun">Ogun</option>
@@ -130,40 +133,278 @@
                 <option value="Taraba">Taraba</option>
                 <option value="Yobe">Yobe</option>
                 <option value="Zamfara">Zamfara</option>
+                <option value="FCT">FCT</option>
+
             </select>
-            <button type="submit">Proceed to Payment</button>
+
+            <input type="text" id="address" placeholder="Delivery Address" required />
+
+            <div id="orderSummary">
+
+                <p>
+                    Products:
+                    <strong id="productsTotal">₦0</strong>
+                </p>
+
+                <p>
+                    Transportation:
+                    <strong id="transportFee">₦0</strong>
+                </p>
+
+                <hr>
+
+                <p>
+                    Total:
+                    <strong id="grandTotal">₦0</strong>
+                </p>
+
+            </div>
+
+            <button type="submit">
+                Proceed to Payment
+            </button>
+
         </form>
     </div>
     <script>
-        document.getElementById("checkoutForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
 
-            const fullname = document.getElementById("fullname").value;
-            const phone = document.getElementById("phone").value;
-            const whatsapp = document.getElementById("whatsapp").value;
-            const state = document.getElementById("state").value;
+        const stateSelect = document.getElementById("state");
 
-            if (!fullname || !phone || !whatsapp || !state) {
-                alert("All fields are required!");
-                return;
-            }
+        stateSelect.addEventListener("change", async () => {
+
+            const state = stateSelect.value;
+
+            if (!state) return;
 
             const token = localStorage.getItem("token");
-            const user = JSON.parse(localStorage.getItem("user"));
-            const amount = calculateTotal(); // your existing function
 
-            const res = await fetch("https://a-s-ventures-backend.onrender.com/api/payment/initialize", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify({ amount, email: user.email, fullname, phone, whatsapp, state })
-            });
+            try {
 
-            const data = await res.json();
-            window.location.href = data.paymentLink;
+                // Get cart
+                const cartRes = await fetch(
+                    "https://a-s-ventures-backend.onrender.com/api/cart",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const cart = await cartRes.json();
+
+                let productsTotal = 0;
+
+                cart.forEach(item => {
+
+                    if (item.product) {
+
+                        productsTotal +=
+                            Number(item.product.sellingPrice) *
+                            Number(item.quantity);
+
+                    }
+
+                });
+
+
+                // Get transportation prices
+                const transportRes = await fetch(
+                    "https://a-s-ventures-backend.onrender.com/api/transport/prices"
+                );
+
+                const transports =
+                    await transportRes.json();
+
+                const transport =
+                    transports.find(t => t.state === state);
+
+                if (!transport) {
+
+                    alert(
+                        "Transportation price not available for this state."
+                    );
+
+                    return;
+
+                }
+
+                const transportFee =
+                    Number(transport.transportPrice);
+
+                const total =
+                    productsTotal + transportFee;
+
+
+                document.getElementById("productsTotal")
+                    .textContent =
+                    `₦${productsTotal.toLocaleString()}`;
+
+                document.getElementById("transportFee")
+                    .textContent =
+                    `₦${transportFee.toLocaleString()}`;
+
+                document.getElementById("grandTotal")
+                    .textContent =
+                    `₦${total.toLocaleString()}`;
+
+
+            } catch (error) {
+
+                console.error(
+                    "Error calculating checkout:",
+                    error
+                );
+
+            }
+
         });
+        document
+            .getElementById("checkoutForm")
+            .addEventListener("submit", async (e) => {
+
+                e.preventDefault();
+
+                const fullname =
+                    document.getElementById("fullname").value.trim();
+
+                const phone =
+                    document.getElementById("phone").value.trim();
+
+                const whatsapp =
+                    document.getElementById("whatsapp").value.trim();
+
+                const state =
+                    document.getElementById("state").value;
+
+                const address =
+                    document.getElementById("address").value.trim();
+
+
+                if (
+                    !fullname ||
+                    !phone ||
+                    !whatsapp ||
+                    !state ||
+                    !address
+                ) {
+
+                    alert("Please fill in all fields.");
+
+                    return;
+
+                }
+
+
+                const token =
+                    localStorage.getItem("token");
+
+
+                const user =
+                    JSON.parse(
+                        localStorage.getItem("user")
+                    );
+
+
+                if (!token || !user) {
+
+                    alert("Please login first.");
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+
+                }
+
+
+                try {
+
+                    const res = await fetch(
+
+                        "https://a-s-ventures-backend.onrender.com/api/payment/initialize",
+
+                        {
+
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json",
+
+                                Authorization:
+                                    `Bearer ${token}`
+
+                            },
+
+                            body: JSON.stringify({
+
+                                email:
+                                    user.email,
+
+                                fullname,
+
+                                phone,
+
+                                whatsapp,
+
+                                state,
+
+                                address
+
+                            })
+
+                        }
+
+                    );
+
+
+                    const data =
+                        await res.json();
+
+
+                    if (!res.ok) {
+
+                        alert(
+                            data.message ||
+                            "Could not initialize payment."
+                        );
+
+                        return;
+
+                    }
+
+
+                    // Save transaction reference
+                    localStorage.setItem(
+                        "tx_ref",
+                        data.tx_ref
+                    );
+
+                    localStorage.setItem("checkoutDetails", JSON.stringify({
+                        fullname,
+                        phone,
+                        whatsapp,
+                        state,
+                        address
+                    }));
+
+                    // Send buyer to Flutterwave
+                    window.location.href =
+                        data.paymentLink;
+
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    alert(
+                        "Something went wrong."
+                    );
+
+                }
+
+            });
     </script>
 </body>
 

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Payment Successful | A&S Ventures
+    </title>
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            background:
+                linear-gradient(135deg,
+                    #063006,
+                    #114711);
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            color: white;
+
+        }
+
+
+        .success-container {
+
+            width: 90%;
+
+            max-width: 500px;
+
+            padding:
+                45px 35px;
+
+            text-align: center;
+
+            background:
+                rgba(255, 255, 255, 0.1);
+
+            backdrop-filter:
+                blur(15px);
+
+            -webkit-backdrop-filter:
+                blur(15px);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.15);
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.35);
+
+        }
+
+
+        .success-icon {
+
+            width: 90px;
+
+            height: 90px;
+
+            margin:
+                0 auto 25px;
+
+            border-radius: 50%;
+
+            background:
+                #0d2e0d;
+
+            border:
+                3px solid #00c853;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 45px;
+
+            color:
+                #00c853;
+
+        }
+
+
+        .loading-icon {
+
+            width: 70px;
+
+            height: 70px;
+
+            margin:
+                0 auto 25px;
+
+            border-radius: 50%;
+
+            border:
+                5px solid rgba(255, 255, 255, 0.2);
+
+            border-top:
+                5px solid #00c853;
+
+            animation:
+                spin 1s linear infinite;
+
+        }
+
+
+        h1 {
+
+            font-size: 28px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        #message {
+
+            font-size: 17px;
+
+            line-height: 1.6;
+
+            color:
+                #e8f5e9;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .back-btn {
+
+            display: none;
+
+            padding:
+                13px 25px;
+
+            background:
+                #0d2e0d;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+
+        }
+
+
+        .back-btn:hover {
+
+            background:
+                #009900;
+
+        }
+
+
+        @keyframes spin {
+
+            to {
+
+                transform:
+                    rotate(360deg);
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .success-container {
+
+                padding:
+                    35px 22px;
+
+            }
+
+            h1 {
+
+                font-size:
+                    25px;
+
+            }
+
+            #message {
+
+                font-size:
+                    15px;
+
+            }
+
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="success-container">
+
+        <div id="loadingIcon" class="loading-icon">
+        </div>
+
+
+        <div id="successIcon" class="success-icon" style="display:none;">
+            ✓
+        </div>
+
+
+        <h1 id="title">
+            Verifying Payment
+        </h1>
+
+
+        <p id="message">
+
+            Please wait while we verify
+            your payment...
+
+        </p>
+
+
+        <a id="backButton" class="back-btn" href="orders.html">
+
+            View My Orders
+
+        </a>
+
+    </div>
+
+
+    <script>
+
+
+        async function verifyPayment() {
+
+
+            // ==================================================
+            // GET FLUTTERWAVE TRANSACTION ID
+            // ==================================================
+
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+
+            const transactionId =
+                params.get("transaction_id");
+
+
+            // ==================================================
+            // GET TOKEN
+            // ==================================================
+
+            const token =
+                localStorage.getItem("token");
+
+
+            // ==================================================
+            // Check login
+            // ==================================================
+
+            if (!token) {
+
+                document.getElementById(
+                    "title"
+                ).textContent =
+                    "Login Required";
+
+
+                document.getElementById(
+                    "message"
+                ).textContent =
+                    "Please login again to continue.";
+
+
+                return;
+
+            }
+
+
+            // ==================================================
+            // Check transaction ID
+            // ==================================================
+
+            if (!transactionId) {
+
+                document.getElementById(
+                    "title"
+                ).textContent =
+                    "Payment Error";
+
+
+                document.getElementById(
+                    "message"
+                ).textContent =
+                    "Flutterwave transaction ID was not found.";
+
+
+                return;
+
+            }
+
+
+            // ==================================================
+            // Get checkout information
+            // ==================================================
+
+            if (!checkoutDetails) {
+
+                document.getElementById(
+                    "title"
+                ).textContent =
+                    "Checkout Information Missing";
+
+
+                document.getElementById(
+                    "message"
+                ).textContent =
+                    "Your payment was received, but your delivery information could not be found. Please contact A&S Ventures.";
+
+
+                return;
+
+            }
+
+
+            try {
+
+
+                // ==================================================
+                // VERIFY PAYMENT
+                // ==================================================
+
+                const res =
+                    await fetch(
+
+                        `https://a-s-ventures-backend.onrender.com/api/payment/verify/${transactionId}`,
+
+                        {
+
+                            method:
+                                "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json",
+
+                                Authorization:
+                                    `Bearer ${token}`
+
+                            },
+
+                        }
+
+                    );
+
+
+                const data =
+                    await res.json();
+
+
+                console.log(
+                    "Payment verification:",
+                    data
+                );
+
+
+                // ==================================================
+                // PAYMENT FAILED
+                // ==================================================
+
+                if (!res.ok) {
+
+                    document.getElementById(
+                        "loadingIcon"
+                    ).style.display =
+                        "none";
+
+
+                    document.getElementById(
+                        "title"
+                    ).textContent =
+                        "Payment Verification Failed";
+
+
+                    document.getElementById(
+                        "message"
+                    ).textContent =
+                        data.message ||
+                        "We could not verify your payment.";
+
+
+                    document.getElementById(
+                        "backButton"
+                    ).style.display =
+                        "inline-block";
+
+
+                    return;
+
+                }
+
+
+                // ==================================================
+                // PAYMENT SUCCESSFUL
+                // ==================================================
+
+                document.getElementById(
+                    "loadingIcon"
+                ).style.display =
+                    "none";
+
+
+                document.getElementById(
+                    "successIcon"
+                ).style.display =
+                    "flex";
+
+
+                document.getElementById(
+                    "title"
+                ).textContent =
+                    "Payment Successful!";
+
+
+                document.getElementById(
+                    "message"
+                ).textContent =
+                    "Your payment has been verified and your order has been placed successfully.";
+
+
+                document.getElementById(
+                    "backButton"
+                ).style.display =
+                    "inline-block";
+
+
+                // ==================================================
+                // Remove checkout information
+                // ==================================================
+
+                localStorage.removeItem(
+                    "checkoutDetails"
+                );
+
+
+                localStorage.removeItem(
+                    "tx_ref"
+                );
+
+
+                // ==================================================
+                // Redirect to orders
+                // ==================================================
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        "orders.html";
+
+                }, 3000);
+
+
+            } catch (error) {
+
+
+                console.error(
+                    "Payment verification error:",
+                    error
+                );
+
+
+                document.getElementById(
+                    "loadingIcon"
+                ).style.display =
+                    "none";
+
+
+                document.getElementById(
+                    "title"
+                ).textContent =
+                    "Something Went Wrong";
+
+
+                document.getElementById(
+                    "message"
+                ).textContent =
+                    "We could not verify your payment. Please contact A&S Ventures if money was deducted from your account.";
+
+
+                document.getElementById(
+                    "backButton"
+                ).style.display =
+                    "inline-block";
+
+            }
+
+        }
+
+
+        verifyPayment();
+
+
+    </script>
+
+</body>
+
+</html>

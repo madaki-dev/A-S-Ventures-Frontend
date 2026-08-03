@@ -18,7 +18,7 @@
         <h2>A&S Ventures</h2>
       </div>
 
-      <ul class="nav-links" id="navLinks">
+      <ul class="nav-links" id="navi">
         <li><a href="index.html">Home</a></li>
         <li><a href="services.html">Services</a></li>
         <li><a href="about.html">About</a></li>
@@ -155,7 +155,86 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.log("No login token found.");
+        return;
+      }
+
+      try {
+
+        const res = await fetch(
+          "https://a-s-ventures-backend.onrender.com/api/profile",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        const user = await res.json();
+
+        console.log("PROFILE DATA:", user);
+
+        if (!res.ok) {
+          console.error("Profile request failed:", user);
+          return;
+        }
+
+        const nav = document.getElementById("navi");
+
+        if (!nav) {
+          console.error("Navbar #navi was not found.");
+          return;
+        }
+
+        // ADMIN
+        if (user.role === "Admin") {
+
+          nav.insertAdjacentHTML(
+            "beforeend",
+            `
+                <li>
+                    <a href="admin-dashboard.html">
+                        Admin DB
+                    </a>
+                </li>
+                `
+          );
+
+        }
+
+        // FARMER
+        if (user.accountType === "farmer") {
+
+          nav.insertAdjacentHTML(
+            "beforeend",
+            `
+                <li>
+                    <a href="farmer-dashboard.html">
+                        Farmer DB
+                    </a>
+                </li>
+                `
+          );
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Error fetching profile:",
+          error
+        );
+
+      }
+
+    });
+  </script>
 </body>
 
 </html>

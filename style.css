@@ -560,6 +560,68 @@ button {
     margin: 15px 20px 20px;
 }
 
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin: 40px 0;
+}
+
+.pagination button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#pageNumber {
+    font-weight: bold;
+}
+
+.product-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.product-actions .cart-btn,
+.product-actions .details-btn {
+    width: 48%;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.product-actions .details-btn {
+    border: 1px solid #1f7a3f;
+    color: #1f7a3f;
+}
+
+.product-actions .details-btn:hover {
+    transform: translateY(-2px);
+}
+
+.product-actions .cart-btn:hover {
+    transform: translateY(-2px);
+}
+
 /* ====================================
    LOGIN PAGE
 ==================================== */

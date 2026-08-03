@@ -77,29 +77,3 @@ farmerForm.addEventListener("submit", async (e) => {
 
 });
 
-document.addEventListener("DOMContentLoaded", async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-        const res = await fetch("https://a-s-ventures-backend.onrender.com/api/profile", {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        const user = await res.json();
-        console.log("Profile response:", user);
-
-        const nav = document.getElementById("navLinks");
-
-        // Show Admin Dashboard link
-        if (user.role === "Admin") {
-            nav.innerHTML += `<li><a href="admin-dashboard.html">Admin Dashboard</a></li>`;
-        }
-
-        // Show Farmer Dashboard link
-        if (user.accountType === "Farmer") {
-            nav.innerHTML += `<li><a href="farmer-dashboard.html">Farmer Dashboard</a></li>`;
-        }
-    } catch (error) {
-        console.error("Error fetching profile:", error);
-    }
-});

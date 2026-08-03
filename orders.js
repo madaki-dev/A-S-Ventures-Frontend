@@ -22,7 +22,7 @@ async function loadOrders() {
         container.innerHTML += `
         <div class="order-card">
            <h3>Order ID: ${order._id}</h3>
-           <p>Total: ₦${order.totalAmount}</p>
+           <p>Total: ₦${Number(order.totalAmount).toLocaleString()}</p>
            <p>Status: ${order.status}</p>
            <p>Date: ${new Date(order.createdAt).toLocaleString()}</p>
            <hr>
