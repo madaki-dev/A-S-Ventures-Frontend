@@ -176,33 +176,168 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
+
             const token = localStorage.getItem("token");
-            const res = await fetch("https://a-s-ventures-backend.onrender.com/api/profile", {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            const user = await res.json();
-            document.getElementById("userName").textContent = user.fullName;
-            document.getElementById("userEmail").textContent = user.email;
-            document.getElementById("userType").textContent = user.accountType;
-            document.getElementById("userRole").textContent = user.role;
 
-            // Upload profile picture
-            document.getElementById("uploadForm").addEventListener("submit", async (e) => {
-                e.preventDefault();
-                const formData = new FormData();
-                formData.append("image", document.getElementById("profileImage").files[0]);
+            if (!token) {
+                alert("Please login first.");
+                window.location.href = "login.html";
+                return;
+            }
 
-                const res = await fetch("https://a-s-ventures-backend.onrender.com/api/profile/upload-profile", {
-                    method: "POST",
-                    headers: { Authorization: `Bearer ${token}` },
-                    body: formData
+            // =========================
+            // LOAD PROFILE
+            // =========================
+
+            try {
+
+                const res = await fetch(
+                    "https://a-s-ventures-backend.onrender.com/api/profile",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const user = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(user.message || "Could not load profile.");
+                }
+
+                document.getElementById("userName").textContent =
+                    user.fullName || "";
+
+                document.getElementById("userEmail").textContent =
+                    user.email || "";
+
+                document.getElementById("userType").textContent =
+                    user.accountType || "";
+
+                document.getElementById("userRole").textContent =
+                    user.role || "";
+
+                // =========================
+                // SHOW EXISTING PROFILE PIC
+                // =========================
+
+                if (user.profileImage) {
+
+                    document.getElementById("profilePic").src =
+                        `https://a-s-ventures-backend.onrender.com/uploads/${user.profileImage}`;
+
+                }
+
+            } catch (error) {
+
+                console.error("Profile loading error:", error);
+
+                alert("Could not load your profile.");
+
+            }
+
+
+            // =========================
+            // PROFILE IMAGE UPLOAD
+            // =========================
+
+            document
+                .getElementById("uploadForm")
+                .addEventListener("submit", async (e) => {
+
+                    e.preventDefault();
+
+                    const fileInput =
+                        document.getElementById("profileImage");
+
+                    const file =
+                        fileInput.files[0];
+
+                    if (!file) {
+
+                        alert("Please select a profile picture.");
+
+                        return;
+
+                    }
+
+                    const formData =
+                        new FormData();
+
+                    formData.append("image", file);
+
+
+                    try {
+
+                        const res = await fetch(
+                            "https://a-s-ventures-backend.onrender.com/api/profile/upload-profile",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    Authorization: `Bearer ${token}`
+                                },
+
+                                body: formData
+                            }
+                        );
+
+
+                        const data =
+                            await res.json();
+
+
+                        console.log(
+                            "Upload response:",
+                            data
+                        );
+
+
+                        if (!res.ok) {
+
+                            alert(
+                                data.message ||
+                                "Profile picture upload failed."
+                            );
+
+                            return;
+
+                        }
+
+
+                        // =========================
+                        // UPDATE PROFILE IMAGE
+                        // =========================
+
+                        document.getElementById("profilePic").src =
+                            `https://a-s-ventures-backend.onrender.com/uploads/${data.filename}`;
+
+
+                        alert(
+                            data.message ||
+                            "Profile picture uploaded successfully."
+                        );
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "Profile upload error:",
+                            error
+                        );
+
+                        alert(
+                            "Something went wrong while uploading the picture."
+                        );
+
+                    }
+
                 });
-                const data = await res.json();
-                document.getElementById("profilePic").src = "/uploads/" + data.filename;
-                alert(data.message);
-            });
+
         });
     </script>
+
 </body>
 
 </html>
