@@ -185,9 +185,9 @@
                 return;
             }
 
-            // =========================
+            // ==========================
             // LOAD PROFILE
-            // =========================
+            // ==========================
 
             try {
 
@@ -207,40 +207,41 @@
                 }
 
                 document.getElementById("userName").textContent =
-                    user.fullName || "";
+                    user.fullName;
 
                 document.getElementById("userEmail").textContent =
-                    user.email || "";
+                    user.email;
 
                 document.getElementById("userType").textContent =
-                    user.accountType || "";
+                    user.accountType;
 
                 document.getElementById("userRole").textContent =
-                    user.role || "";
+                    user.role;
 
-                // =========================
-                // SHOW EXISTING PROFILE PIC
-                // =========================
+
+                // ==========================
+                // LOAD PROFILE IMAGE
+                // ==========================
 
                 if (user.profileImage) {
 
                     document.getElementById("profilePic").src =
-                        `https://a-s-ventures-backend.onrender.com/uploads/${user.profileImage}`;
+                        `https://a-s-ventures-backend.onrender.com/upload/${user.profileImage}`;
 
                 }
 
             } catch (error) {
 
-                console.error("Profile loading error:", error);
+                console.error("PROFILE LOAD ERROR:", error);
 
                 alert("Could not load your profile.");
 
             }
 
 
-            // =========================
-            // PROFILE IMAGE UPLOAD
-            // =========================
+            // ==========================
+            // UPLOAD PROFILE IMAGE
+            // ==========================
 
             document
                 .getElementById("uploadForm")
@@ -256,19 +257,44 @@
 
                     if (!file) {
 
-                        alert("Please select a profile picture.");
+                        alert("Please select an image.");
 
                         return;
 
                     }
 
-                    const formData =
-                        new FormData();
+
+                    // Check file type
+
+                    if (!file.type.startsWith("image/")) {
+
+                        alert("Please select an image file.");
+
+                        return;
+
+                    }
+
+
+                    // Check file size
+
+                    if (file.size > 5 * 1024 * 1024) {
+
+                        alert("Image must be smaller than 5MB.");
+
+                        return;
+
+                    }
+
+
+                    const formData = new FormData();
 
                     formData.append("image", file);
 
 
                     try {
+
+                        console.log("Uploading:", file.name);
+
 
                         const res = await fetch(
                             "https://a-s-ventures-backend.onrender.com/api/profile/upload-profile",
@@ -276,7 +302,8 @@
                                 method: "POST",
 
                                 headers: {
-                                    Authorization: `Bearer ${token}`
+                                    Authorization:
+                                        `Bearer ${token}`
                                 },
 
                                 body: formData
@@ -284,9 +311,7 @@
                         );
 
 
-                        const data =
-                            await res.json();
-
+                        const data = await res.json();
 
                         console.log(
                             "Upload response:",
@@ -298,7 +323,7 @@
 
                             alert(
                                 data.message ||
-                                "Profile picture upload failed."
+                                "Image upload failed."
                             );
 
                             return;
@@ -306,29 +331,26 @@
                         }
 
 
-                        // =========================
-                        // UPDATE PROFILE IMAGE
-                        // =========================
+                        // Show uploaded image immediately
 
                         document.getElementById("profilePic").src =
-                            `https://a-s-ventures-backend.onrender.com/uploads/${data.filename}`;
+                            `https://a-s-ventures-backend.onrender.com/upload/${data.filename}`;
 
 
                         alert(
-                            data.message ||
-                            "Profile picture uploaded successfully."
+                            "Profile picture uploaded successfully!"
                         );
 
 
                     } catch (error) {
 
                         console.error(
-                            "Profile upload error:",
+                            "UPLOAD ERROR:",
                             error
                         );
 
                         alert(
-                            "Something went wrong while uploading the picture."
+                            "Something went wrong. Check the browser console."
                         );
 
                     }
