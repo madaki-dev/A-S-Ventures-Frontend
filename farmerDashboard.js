@@ -1,68 +1,135 @@
 document.addEventListener("DOMContentLoaded", async () => {
+
     const token = localStorage.getItem("token");
+
     if (!token) {
         window.location.href = "login.html";
         return;
     }
 
     try {
-        // Fetch farmer profile
-        const res = await fetch("https://a-s-ventures-backend.onrender.com/api/profile", {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        const user = await res.json();
 
-        // Fetch farmer products
-        const prodRes = await fetch("https://a-s-ventures-backend.onrender.com/api/products/mine", {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        const products = await prodRes.json();
+        const res = await fetch(
+            "https://a-s-ventures-backend.onrender.com/api/farmer-dashboard",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
 
-        // Fetch farmer orders
-        const orderRes = await fetch("https://a-s-ventures-backend.onrender.com/api/orders/mine", {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        const orders = await orderRes.json();
+        const data = await res.json();
 
-        // Update stats
-        document.querySelector(".dashboard-stats .stat-card:nth-child(1) h2").innerText = products.length;
-        document.querySelector(".dashboard-stats .stat-card:nth-child(2) h2").innerText = orders.length;
-        document.querySelector(".dashboard-stats .stat-card:nth-child(3) h2").innerText =
-            "₦" + orders.reduce((sum, o) => sum + o.totalPrice, 0);
+        if (!res.ok) {
+            throw new Error(data.message || "Could not load dashboard");
+        }
 
-        // Render products with delete button
-        const grid = document.querySelector(".product-grid");
+        console.log("Dashboard data:", data);
+
+        // ==========================
+        // UPDATE STATS
+        // ==========================
+
+        document.querySelector(
+            ".dashboard-stats .stat-card:nth-child(1) h2"
+        ).innerText = data.productsUploaded;
+
+        document.querySelector(
+            ".dashboard-stats .stat-card:nth-child(2) h2"
+        ).innerText = data.ordersReceived;
+
+        document.querySelector(
+            ".dashboard-stats .stat-card:nth-child(3) h2"
+        ).innerText =
+            "₦" + Number(data.revenue).toLocaleString();
+
+
+        // ==========================
+        // DISPLAY PRODUCTS
+        // ==========================
+
+        const grid =
+            document.querySelector(".product-grid");
+
         grid.innerHTML = "";
-        products.forEach(p => {
-            grid.innerHTML += `
-        <div class="product-card">
-          <img src="${p.image}" />
-          <h3>${p.productName}</h3>
-          <p>${p.location}</p>
-          <h4>₦${p.sellingPrice}/Ton</h4>
-          <button onclick="deleteProduct('${p._id}')">Delete</button>
+
+        if (!data.products || data.products.length === 0) {
+
+            grid.innerHTML = `
+    <div class="no-products-card">
+
+        <div class="no-products-icon">
+            📦
         </div>
-      `;
+
+        <h2>No Products Listed Yet</h2>
+
+        <p>
+            You haven't added any products to the marketplace.
+        </p>
+
+        <a href="upload-product.html" class="add-product-btn">
+            + Add New Product
+        </a>
+
+    </div>
+`;
+
+            return;
+        }
+
+
+        data.products.forEach(product => {
+
+            const image =
+                product.image?.startsWith("http")
+                    ? product.image
+                    : `https://a-s-ventures-backend.onrender.com/uploads/${product.image}`;
+
+            grid.innerHTML += `
+
+                <div class="product-card">
+
+                    <img
+                        src="${image}"
+                        alt="${product.productName}"
+                    >
+
+                    <h3>
+                        ${product.productName}
+                    </h3>
+
+                    <p>
+                        ${product.location}
+                    </p>
+
+                    <h4>
+                        ₦${Number(
+                product.sellingPrice
+            ).toLocaleString()}
+                    </h4>
+
+                    <p>
+                        Quantity: ${product.quantity}
+                    </p>
+
+                    <button
+                        onclick="deleteProduct('${product._id}')">
+                        Delete
+                    </button>
+
+                </div>
+
+            `;
         });
-    } catch (err) {
-        console.error("Error loading dashboard:", err);
+
+    } catch (error) {
+
+        console.error(
+            "DASHBOARD ERROR:",
+            error
+        );
+
     }
+
 });
-
-async function deleteProduct(id) {
-    const token = localStorage.getItem("token");
-    if (!confirm("Are you sure you want to delete this product?")) return;
-
-    const res = await fetch(`https://a-s-ventures-backend.onrender.com/api/products/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
-    });
-
-    const data = await res.json();
-    alert(data.message);
-
-    if (res.ok) {
-        // Reload dashboard after deletion
-        window.location.reload();
-    }
-}

@@ -7,7 +7,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Farmer Dashboard</title>
+    <title>A&S Ventures | Farmer Dashboard</title>
 
     <link rel="stylesheet" href="farmer-dashboard.css">
 
@@ -15,75 +15,151 @@
 
 <body>
 
-    <h1>Farmer Dashboard</h1>
+    <div class="dashboard-container">
 
-    <div class="cards">
+        <!-- HEADER -->
 
-        <div class="card">
+        <header class="dashboard-header">
 
-            <h3>Products Uploaded</h3>
+            <div>
 
-            <h2 id="products">0</h2>
+                <span class="dashboard-badge">
+                    A&S VENTURES
+                </span>
 
-        </div>
+                <h1>Farmer Dashboard</h1>
 
-        <div class="card">
+                <p>
+                    Manage your products, orders and earnings.
+                </p>
 
-            <h3>Orders Received</h3>
+            </div>
 
-            <h2 id="orders">0</h2>
+            <a href="upload-product.html" class="upload-btn">
+                + Upload New Product
+            </a>
 
-        </div>
+        </header>
 
-        <div class="card">
 
-            <h3>Revenue</h3>
+        <!-- STAT CARDS -->
 
-            <h2 id="revenue">₦0</h2>
+        <section class="cards">
 
-        </div>
+            <div class="card">
+
+                <div class="card-icon">
+                    🌾
+                </div>
+
+                <div>
+
+                    <h3>Products Uploaded</h3>
+
+                    <h2 id="products">
+                        0
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    📦
+                </div>
+
+                <div>
+
+                    <h3>Orders Received</h3>
+
+                    <h2 id="orders">
+                        0
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    💰
+                </div>
+
+                <div>
+
+                    <h3>Revenue</h3>
+
+                    <h2 id="revenue">
+                        ₦0
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ORDERS -->
+
+        <section class="orders-section">
+
+            <div class="section-header">
+
+                <span class="section-label">
+                    FARMER ORDERS
+                </span>
+
+                <h2>Orders Received</h2>
+
+                <p>
+                    View your customer orders and update their status.
+                </p>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Buyer</th>
+                            <th>Phone</th>
+                            <th>WhatsApp</th>
+                            <th>Address</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>My Price</th>
+                            <th>Commission</th>
+                            <th>Transport</th>
+                            <th>Buyer Paid</th>
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="ordersTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
 
     </div>
 
-    <h2>Orders</h2>
-
-    <table>
-
-        <thead>
-
-            <tr>
-
-                <th>Buyer</th>
-
-                <th>Phone</th>
-
-                <th>WhatsApp</th>
-
-                <th>Address</th>
-
-                <th>Product</th>
-
-                <th>Quantity</th>
-
-                <th>My Price</th>
-
-                <th>Commission</th>
-
-                <th>Transport</th>
-
-                <th>Buyer Paid</th>
-
-                <th>Status</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody id="ordersTable">
-
-        </tbody>
-
-    </table>
 
     <script src="farmer-orders.js"></script>
 

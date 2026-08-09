@@ -1,8 +1,9 @@
 let currentPage = 1;
 let totalPages = 1;
-
 let allProducts = [];
 
+const API =
+    "https://a-s-ventures-backend.onrender.com";
 
 // ==============================
 // RENDER PRODUCTS
@@ -12,6 +13,8 @@ function renderProducts(products) {
 
     const container =
         document.getElementById("productGrid");
+
+    if (!container) return;
 
     container.innerHTML = "";
 
@@ -26,10 +29,9 @@ function renderProducts(products) {
     products.forEach(product => {
 
         const imgSrc =
-            product.image.startsWith("http")
+            product.image?.startsWith("http")
                 ? product.image
-                : "https://a-s-ventures-backend.onrender.com/uploads/" + product.image;
-
+                : `${API}/uploads/${product.image}`;
 
         container.innerHTML += `
 
@@ -49,28 +51,31 @@ function renderProducts(products) {
                 </p>
 
                 <h4>
-                    ₦${Number(product.sellingPrice).toLocaleString()}/bag
+                    ₦${Number(
+            product.sellingPrice
+        ).toLocaleString()}/bag
                 </h4>
 
                 <p>
                     Quantity: ${product.quantity}
                 </p>
 
-               <div class="product-actions">
+                <div class="product-actions">
 
-    <button
-        onclick="addToCart('${product._id}')"
-        class="cart-btn">
-        Add To Cart
-    </button>
+                    <button
+                        type="button"
+                        onclick="addToCart('${product._id}')"
+                        class="cart-btn">
+                        Add To Cart
+                    </button>
 
-    <a
-        href="product-details.html?id=${product._id}"
-        class="details-btn">
-        See Details
-    </a>
+                    <a
+                        href="product-details.html?id=${product._id}"
+                        class="details-btn">
+                        See Details
+                    </a>
 
-</div>
+                </div>
 
             </div>
 
@@ -78,7 +83,6 @@ function renderProducts(products) {
 
     });
 }
-
 
 
 // ==============================
@@ -90,7 +94,7 @@ async function getProducts(page = 1) {
     try {
 
         const res = await fetch(
-            `https://a-s-ventures-backend.onrender.com/api/products?page=${page}`
+            `${API}/api/products?page=${page}`
         );
 
         if (!res.ok) {
@@ -99,25 +103,17 @@ async function getProducts(page = 1) {
                 await res.json();
 
             throw new Error(
-                error.message
+                error.message ||
+                "Failed to load products."
             );
         }
-
-
-        // IMPORTANT:
-        // Backend still returns an ARRAY
 
         const products =
             await res.json();
 
-
         allProducts = products;
 
         currentPage = page;
-
-
-        // Read pagination information
-        // from backend headers
 
         totalPages =
             Number(
@@ -126,13 +122,11 @@ async function getProducts(page = 1) {
                 )
             ) || 1;
 
-
         renderProducts(
             allProducts
         );
 
         updatePagination();
-
 
     } catch (error) {
 
@@ -141,14 +135,22 @@ async function getProducts(page = 1) {
             error
         );
 
-    }
+        const container =
+            document.getElementById(
+                "productGrid"
+            );
 
+        if (container) {
+
+            container.innerHTML =
+                `<p>Unable to load products.</p>`;
+        }
+    }
 }
 
 
-
 // ==============================
-// PAGINATION DISPLAY
+// PAGINATION
 // ==============================
 
 function updatePagination() {
@@ -168,27 +170,28 @@ function updatePagination() {
             "nextPage"
         );
 
+    if (pageNumber) {
 
-    if (!pageNumber) return;
+        pageNumber.textContent =
+            `Page ${currentPage} of ${totalPages}`;
+    }
 
+    if (prevButton) {
 
-    pageNumber.textContent =
-        `Page ${currentPage} of ${totalPages}`;
+        prevButton.disabled =
+            currentPage <= 1;
+    }
 
+    if (nextButton) {
 
-    prevButton.disabled =
-        currentPage <= 1;
-
-
-    nextButton.disabled =
-        currentPage >= totalPages;
-
+        nextButton.disabled =
+            currentPage >= totalPages;
+    }
 }
 
 
-
 // ==============================
-// NEXT BUTTON
+// NEXT PAGE
 // ==============================
 
 document
@@ -205,16 +208,13 @@ document
                 getProducts(
                     currentPage + 1
                 );
-
             }
-
         }
     );
 
 
-
 // ==============================
-// PREVIOUS BUTTON
+// PREVIOUS PAGE
 // ==============================
 
 document
@@ -223,19 +223,14 @@ document
         "click",
         () => {
 
-            if (
-                currentPage > 1
-            ) {
+            if (currentPage > 1) {
 
                 getProducts(
                     currentPage - 1
                 );
-
             }
-
         }
     );
-
 
 
 // ==============================
@@ -247,7 +242,6 @@ const searchInput =
         "searchInput"
     );
 
-
 if (searchInput) {
 
     searchInput.addEventListener(
@@ -256,8 +250,8 @@ if (searchInput) {
 
             const value =
                 this.value
-                    .toLowerCase();
-
+                    .toLowerCase()
+                    .trim();
 
             const filtered =
                 allProducts.filter(
@@ -267,16 +261,12 @@ if (searchInput) {
                             .includes(value)
                 );
 
-
             renderProducts(
                 filtered
             );
-
         }
     );
-
 }
-
 
 
 // ==============================
@@ -286,61 +276,91 @@ if (searchInput) {
 async function addToCart(productId) {
 
     const token =
-        localStorage.getItem(
-            "token"
-        );
+        localStorage.getItem("token");
 
-
-    const res = await fetch(
-        "https://a-s-ventures-backend.onrender.com/api/cart",
-        {
-
-            method: "POST",
-
-            headers: {
-
-                "Content-Type":
-                    "application/json",
-
-                Authorization:
-                    `Bearer ${token}`
-
-            },
-
-            body: JSON.stringify({
-
-                productId,
-
-                quantity: 1
-
-            })
-
-        }
-    );
-
-
-    const data =
-        await res.json();
-
-
-    if (res.ok) {
-
-        alert(data.message);
-
-        window.location.href =
-            "Cart.html";
-
-    } else {
+    if (!token) {
 
         alert(
-            "Error: " +
-            data.message
+            "Please login before adding products to your cart."
         );
 
+        window.location.href =
+            "login.html";
+
+        return;
     }
 
-}
+    try {
 
+        const res =
+            await fetch(
+                `${API}/api/cart`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        Authorization:
+                            `Bearer ${token}`
+                    },
+
+                    body: JSON.stringify({
+                        productId,
+                        quantity: 1
+                    })
+                }
+            );
+
+        const data =
+            await res.json();
+
+        console.log(
+            "Add to cart response:",
+            data
+        );
+
+        if (!res.ok) {
+
+            if (
+                res.status === 401 ||
+                res.status === 403
+            ) {
+
+                alert(
+                    data.message ||
+                    "Please login as a buyer."
+                );
+
+                return;
+            }
+
+            alert(
+                data.message ||
+                "Could not add product to cart."
+            );
+
+            return;
+        }
+
+        alert(
+            data.message ||
+            "Product added to cart."
+        );
+
+    } catch (error) {
+
+        console.error(
+            "ADD TO CART ERROR:",
+            error
+        );
+
+        alert(
+            "Something went wrong while adding the product to your cart."
+        );
+    }
+}
 
 
 // ==============================
@@ -356,18 +376,14 @@ document.addEventListener(
                 "token"
             );
 
-
         if (!token) {
 
             window.location.href =
                 "login.html";
 
             return;
-
         }
 
-
         getProducts(1);
-
     }
 );

@@ -7,7 +7,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Admin Dashboard</title>
+    <title>A&S Logistics Admin Dashboard</title>
 
     <link rel="stylesheet" href="admin-dashboard.css">
 
@@ -15,73 +15,125 @@
 
 <body>
 
-    <h1>A&S Logistics Admin Dashboard</h1>
+    <div class="admin-container">
 
-    <div class="cards">
+        <!-- HEADER -->
 
-        <div class="card">
+        <header class="admin-header">
 
-            <h3>Total Sales</h3>
+            <div>
+                <span class="admin-badge">A&S VENTURES</span>
 
-            <h2 id="sales">₦0</h2>
+                <h1>A&S Logistics Admin Dashboard</h1>
 
-        </div>
+                <p>
+                    Monitor marketplace sales, orders and commissions.
+                </p>
+            </div>
 
-        <div class="card">
+        </header>
 
-            <h3>Total Orders</h3>
 
-            <h2 id="orders">0</h2>
+        <!-- STAT CARDS -->
 
-        </div>
+        <section class="cards">
 
-        <div class="card">
+            <div class="card">
 
-            <h3>Commission Earned</h3>
+                <div class="card-icon">💰</div>
 
-            <h2 id="commission">₦0</h2>
+                <div>
+                    <h3>Total Sales</h3>
+                    <h2 id="sales">₦0</h2>
+                </div>
 
-        </div>
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">📦</div>
+
+                <div>
+                    <h3>Total Orders</h3>
+                    <h2 id="orders">0</h2>
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">📈</div>
+
+                <div>
+                    <h3>Commission Earned</h3>
+                    <h2 id="commission">₦0</h2>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ORDERS -->
+
+        <section class="orders-section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-label">
+                        MARKETPLACE
+                    </span>
+
+                    <h2>Marketplace Orders</h2>
+
+                    <p>
+                        View and monitor all marketplace transactions.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Buyer</th>
+                            <th>Farmer</th>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>Farmer Price</th>
+                            <th>Commission</th>
+                            <th>Transport</th>
+                            <th>Total Paid</th>
+                            <th>Status</th>
+                            <th>Date</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="ordersTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
 
     </div>
 
-    <h2>Marketplace Orders</h2>
-
-    <table>
-
-        <thead>
-
-            <tr>
-
-                <th>Buyer</th>
-
-                <th>Farmer</th>
-
-                <th>Product</th>
-
-                <th>Qty</th>
-
-                <th>Farmer Price</th>
-
-                <th>Commission</th>
-
-                <th>Transport</th>
-
-                <th>Total Paid</th>
-
-                <th>Status</th>
-
-                <th>Date</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody id="ordersTable">
-
-        </tbody>
-
-    </table>
 
     <script src="admin-dashboard.js"></script>
 

@@ -1,82 +1,537 @@
-body {
+/* =====================================
+   A&S VENTURES ADMIN DASHBOARD
+===================================== */
 
-    font-family: Arial;
+:root {
 
-    margin: 40px;
+    --green-dark: #061b0a;
+    --green: #0f3d13;
+    --green-light: #1f7a2e;
+    --green-bright: #34d058;
 
-    background: linear-gradient(to bottom, #144220, #092c15);
+    --lime: #7cff6b;
 
-    animation: pageFade .3s ease;
+    --white: #ffffff;
+
+    --text: #eaffea;
+    --text-muted: rgba(220, 255, 220, .65);
+
+    --glass: rgba(255, 255, 255, .07);
+
+    --border: rgba(124, 255, 107, .15);
+
+    --shadow:
+        0 20px 45px rgba(0, 0, 0, .35);
 
 }
+
+
+/* =====================================
+   RESET
+===================================== */
+
+* {
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+}
+
+
+html {
+
+    scroll-behavior: smooth;
+
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(circle at top right,
+            rgba(70, 255, 100, .12),
+            transparent 35%),
+
+        radial-gradient(circle at bottom left,
+            rgba(50, 255, 100, .07),
+            transparent 35%),
+
+        linear-gradient(135deg,
+            #061b0a,
+            #0a2d10,
+            #071a0a);
+
+    color: var(--text);
+
+    animation:
+        pageFade .6s ease;
+
+}
+
+
+/* =====================================
+   CONTAINER
+===================================== */
+
+.admin-container {
+
+    width: 92%;
+
+    max-width: 1500px;
+
+    margin: auto;
+
+    padding:
+        50px 0 80px;
+
+}
+
+
+/* =====================================
+   HEADER
+===================================== */
+
+.admin-header {
+
+    margin-bottom: 45px;
+
+}
+
+
+.admin-badge {
+
+    display: inline-block;
+
+    padding:
+        7px 14px;
+
+    margin-bottom: 15px;
+
+    border-radius: 30px;
+
+    background:
+        rgba(124, 255, 107, .08);
+
+    border:
+        1px solid rgba(124, 255, 107, .2);
+
+    color:
+        var(--lime);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.admin-header h1 {
+
+    font-size: 2.8rem;
+
+    margin-bottom: 10px;
+
+    color:
+        #d6ffd6;
+
+}
+
+
+.admin-header p {
+
+    color:
+        var(--text-muted);
+
+    font-size: 1rem;
+
+}
+
+
+/* =====================================
+   STAT CARDS
+===================================== */
 
 .cards {
 
-    display: flex;
+    display: grid;
 
-    gap: 20px;
+    grid-template-columns:
+        repeat(3, 1fr);
 
-    margin-bottom: 40px;
+    gap: 25px;
+
+    margin-bottom: 55px;
 
 }
+
 
 .card {
 
-    background: rgb(5, 70, 19);
+    position: relative;
 
-    padding: 20px;
+    overflow: hidden;
 
-    width: 250px;
+    display: flex;
 
-    border-radius: 12px;
+    align-items: center;
 
-    box-shadow: 0 6px 19px rgba(58, 255, 133, 0);
+    gap: 20px;
 
-    text-align: center;
+    padding: 30px;
 
-    transition: 0.3s;
+    min-height: 150px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(145deg,
+            rgba(255, 255, 255, .09),
+            rgba(255, 255, 255, .025));
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(15px);
+
+    box-shadow:
+        var(--shadow);
+
+    transition:
+        .35s ease;
 
 }
+
+
+.card::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    border-radius: inherit;
+
+    border:
+        1px solid rgba(124, 255, 107, .06);
+
+    pointer-events: none;
+
+}
+
 
 .card:hover {
-    box-shadow: 0 6px 19px rgba(58, 255, 134, 0.548);
-    transform: translateY(-10px);
+
+    transform:
+        translateY(-8px);
+
+    box-shadow:
+        0 25px 55px rgba(0, 0, 0, .45),
+
+        0 0 25px rgba(124, 255, 107, .12);
+
 }
+
+
+.card-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 15px;
+
+    background:
+        rgba(52, 208, 88, .12);
+
+    border:
+        1px solid rgba(124, 255, 107, .15);
+
+    font-size: 26px;
+
+}
+
+
+.card h3 {
+
+    margin-bottom: 8px;
+
+    color:
+        var(--text-muted);
+
+    font-size: .9rem;
+
+    font-weight: 600;
+
+}
+
+
+.card h2 {
+
+    color:
+        #baffb3;
+
+    font-size: 1.8rem;
+
+}
+
+
+/* =====================================
+   ORDERS SECTION
+===================================== */
+
+.orders-section {
+
+    padding: 30px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255, 255, 255, .045);
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(15px);
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.section-header {
+
+    margin-bottom: 30px;
+
+}
+
+
+.section-label {
+
+    color:
+        var(--lime);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.section-header h2 {
+
+    margin-top: 7px;
+
+    margin-bottom: 7px;
+
+    color:
+        #d6ffd6;
+
+    font-size: 1.8rem;
+
+}
+
+
+.section-header p {
+
+    color:
+        var(--text-muted);
+
+}
+
+
+/* =====================================
+   TABLE
+===================================== */
+
+.table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+    border-radius: 14px;
+
+}
+
 
 table {
 
     width: 100%;
 
+    min-width: 1100px;
+
     border-collapse: collapse;
 
-    background: white;
+    overflow: hidden;
 
 }
 
-th,
+
+thead {
+
+    background:
+        rgba(31, 122, 46, .35);
+
+}
+
+
+th {
+
+    padding: 16px;
+
+    color:
+        #baffb3;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    text-align: center;
+
+    white-space: nowrap;
+
+    border-bottom:
+        1px solid rgba(124, 255, 107, .15);
+
+}
+
+
 td {
 
     padding: 15px;
 
-    border: 1px solid #ddd;
+    color:
+        rgba(235, 255, 235, .85);
+
+    font-size: 14px;
 
     text-align: center;
 
-}
-
-th {
-
-    background: #1d7a2e;
-
-    color: rgb(147, 253, 188);
+    border-bottom:
+        1px solid rgba(255, 255, 255, .06);
 
 }
 
-tr:nth-child(even) {
 
-    background: #0c7726;
+tbody tr {
+
+    transition:
+        .25s ease;
 
 }
+
+
+tbody tr:hover {
+
+    background:
+        rgba(124, 255, 107, .06);
+
+}
+
+
+tbody tr:last-child td {
+
+    border-bottom: none;
+
+}
+
+
+/* =====================================
+   STATUS
+===================================== */
+
+.status {
+
+    display: inline-block;
+
+    padding:
+        6px 12px;
+
+    border-radius: 30px;
+
+    background:
+        rgba(124, 255, 107, .1);
+
+    border:
+        1px solid rgba(124, 255, 107, .2);
+
+    color:
+        #baffb3;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+/* =====================================
+   SCROLLBAR
+===================================== */
+
+::-webkit-scrollbar {
+
+    width: 9px;
+    height: 9px;
+
+}
+
+
+::-webkit-scrollbar-track {
+
+    background:
+        #061b0a;
+
+}
+
+
+::-webkit-scrollbar-thumb {
+
+    background:
+        #2ecc71;
+
+    border-radius:
+        10px;
+
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+
+    background:
+        #7cff6b;
+
+}
+
+
+/* =====================================
+   PAGE ANIMATION
+===================================== */
 
 @keyframes pageFade {
 
@@ -84,7 +539,8 @@ tr:nth-child(even) {
 
         opacity: 0;
 
-        transform: translateY(15px);
+        transform:
+            translateY(15px);
 
     }
 
@@ -92,7 +548,66 @@ tr:nth-child(even) {
 
         opacity: 1;
 
-        transform: translateY(0);
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 900px) {
+
+    .cards {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .admin-header h1 {
+
+        font-size:
+            2.2rem;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .admin-container {
+
+        width: 94%;
+
+        padding-top:
+            30px;
+
+    }
+
+    .admin-header h1 {
+
+        font-size:
+            1.8rem;
+
+    }
+
+    .orders-section {
+
+        padding:
+            20px;
+
+    }
+
+    .card {
+
+        padding:
+            25px;
 
     }
 

@@ -78,15 +78,21 @@ async function loadOrders() {
 
 <td>${product.quantity}</td>
 
-<td>₦${product.farmerPrice.toLocaleString()}</td>
+<td>₦${Number(product.farmerPrice || 0).toLocaleString()}</td>
 
-<td>₦${product.commission.toLocaleString()}</td>
+<td>₦${Number(product.commission || 0).toLocaleString()}</td>
 
-<td>₦${product.transport.toLocaleString()}</td>
+<td>₦${Number(product.transport || 0).toLocaleString()}</td>
 
-<td>₦${order.totalPaid.toLocaleString()}</td>
+<td>
+    ₦${Number(order.totalPaid || 0).toLocaleString()}
+</td>
 
-<td>${order.status}</td>
+<td>
+    <span class="status">
+        ${order.status}
+    </span>
+</td>
 
 <td>${new Date(order.date).toLocaleDateString()}</td>
 

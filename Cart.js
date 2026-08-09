@@ -1,78 +1,266 @@
-const token = localStorage.getItem("token");
+const API =
+    "https://a-s-ventures-backend.onrender.com";
 
-const res = await fetch("https://a-s-ventures-backend.onrender.com/api/cart", {
+// ==============================
+// LOAD CART
+// ==============================
 
-    headers: {
+async function loadCart() {
 
-        Authorization: `Bearer ${token}`
+    const container =
+        document.getElementById("cart");
 
+    if (!container) return;
+
+    const token =
+        localStorage.getItem("token");
+
+    if (!token) {
+
+        window.location.href =
+            "login.html";
+
+        return;
     }
-});
 
-const cart = await res.json();
+    try {
 
-const container = document.getElementById("cart");
+        const res = await fetch(
+            `${API}/api/cart`,
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${token}`
+                }
+            }
+        );
 
-container.innerHTML = "";
+        const data =
+            await res.json();
 
-cart.forEach(item => {
+        console.log(
+            "Cart response:",
+            data
+        );
 
-    container.innerHTML += `
-    
-    <div>
+        if (!res.ok) {
 
-    <img
-    src="https://a-s-ventures-backend.onrender.com/uploads/${item.product.image}"
-    width="150"
->
+            console.error(
+                "Cart request failed:",
+                data
+            );
 
-    <h2>${item.product.productName}</h2>
+            alert(
+                data.message ||
+                "Could not load cart."
+            );
 
-    <p>N${item.product.sellingPrice}</p>
+            return;
+        }
 
-    <p>Qty:${item.quantity}</p>
+        const cart = data;
 
-    <button onclick="removeItem('${item._id}')">
+        container.innerHTML = "";
 
-    Remove
+        if (
+            !Array.isArray(cart) ||
+            cart.length === 0
+        ) {
 
-    </button>
+            container.innerHTML = `
+                <div class="order-card">
 
-    <button onclick="checkout()">
+                    <h2>Your cart is empty.</h2>
 
-    Proceed To Payment
+                    <p>
+                        Add products from the marketplace.
+                    </p>
 
-    </button>
+                    <a href="marketplace.html" class="marketplace-link">
+                        Go To Marketplace
+                    </a>
 
-    </div>
+                </div>
+            `;
 
-    `;
-});
+            return;
+        }
 
-//Remove Item
+
+        // ==============================
+        // DISPLAY CART ITEMS
+        // ==============================
+
+        cart.forEach(item => {
+
+            if (!item.product) {
+
+                console.warn(
+                    "Cart item has no product:",
+                    item
+                );
+
+                return;
+            }
+
+            const product =
+                item.product;
+
+            const image =
+                product.image?.startsWith("http")
+                    ? product.image
+                    : `${API}/uploads/${product.image}`;
+
+            const subtotal =
+                Number(product.sellingPrice) *
+                Number(item.quantity);
+
+
+            container.innerHTML += `
+
+                <div class="order-card">
+
+                    <img
+                        src="${image}"
+                        width="150"
+                        alt="${product.productName}"
+                    >
+
+                    <h2>
+                        ${product.productName}
+                    </h2>
+
+                    <p>
+                        Price:
+                        ₦${Number(
+                product.sellingPrice
+            ).toLocaleString()}
+                    </p>
+
+                    <p>
+                        Quantity:
+                        ${item.quantity}
+                    </p>
+
+                    <p>
+                        Subtotal:
+                        ₦${subtotal.toLocaleString()}
+                    </p>
+
+                    <button
+                        type="button"
+                        onclick="removeItem('${item._id}')">
+                        Remove
+                    </button>
+
+                </div>
+
+            `;
+
+        });
+
+
+        // Checkout button
+
+        container.innerHTML += `
+
+            <div class="order-card">
+
+                <button
+                    type="button"
+                    onclick="checkout()">
+                    Proceed To Checkout
+                </button>
+
+            </div>
+
+        `;
+
+    } catch (error) {
+
+        console.error(
+            "LOAD CART ERROR:",
+            error
+        );
+
+        container.innerHTML = `
+            <p>
+                Something went wrong while
+                loading your cart.
+            </p>
+        `;
+    }
+}
+
+
+// ==============================
+// REMOVE ITEM
+// ==============================
 
 async function removeItem(id) {
 
-    const token = localStorage.getItem("token");
+    const token =
+        localStorage.getItem("token");
 
-    await fetch(`https://a-s-ventures-backend.onrender.com/api/cart/${id}`, {
+    try {
 
-        method: "DELETE",
+        const res = await fetch(
+            `${API}/api/cart/${id}`,
+            {
+                method: "DELETE",
 
-        headers: {
+                headers: {
+                    Authorization:
+                        `Bearer ${token}`
+                }
+            }
+        );
 
-            Authorization: `Bearer ${token}`
+        const data =
+            await res.json();
 
+        if (!res.ok) {
+
+            alert(
+                data.message ||
+                "Could not remove item."
+            );
+
+            return;
         }
-    });
 
-    location.reload();
+        loadCart();
 
+    } catch (error) {
+
+        console.error(
+            "REMOVE ITEM ERROR:",
+            error
+        );
+
+        alert(
+            "Something went wrong."
+        );
+    }
 }
+
+
+// ==============================
+// CHECKOUT
+// ==============================
 
 function checkout() {
 
     window.location.href =
-        "buyer-checkout.html";
-
+        "buyer-checkoutForm.html";
 }
+
+
+// ==============================
+// PAGE LOAD
+// ==============================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    loadCart
+);
