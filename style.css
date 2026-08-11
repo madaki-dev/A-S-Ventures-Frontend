@@ -1078,6 +1078,12 @@ button {
     text-align: center;
 }
 
+.unit {
+
+    color: #0c4d18;
+
+}
+
 .product-actions {
 
     display: flex;
