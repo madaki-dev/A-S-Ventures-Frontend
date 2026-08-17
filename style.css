@@ -2966,3 +2966,160 @@ body::after {
     box-shadow:
         0 0 30px rgba(52, 208, 88, 0.6);
 }
+
+/* =========================================
+   A&S FINAL MOBILE / SAFARI OVERRIDE
+========================================= */
+
+html {
+    background: #071a0a !important;
+    color-scheme: dark;
+}
+
+body {
+    background:
+        radial-gradient(circle at top,
+            #0f3d13 0%,
+            #071a0a 70%) !important;
+
+    color: #eaf7ea !important;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Sections must remain transparent */
+section,
+header,
+main,
+footer {
+    background-color: transparent !important;
+}
+
+/* Cards */
+.upload-card,
+.login-card,
+.register-form,
+.contact-card,
+.about-content,
+.feature-card,
+.product-card,
+.stat-card,
+.order-card,
+.service-card {
+
+    background: rgba(255, 255, 255, 0.08) !important;
+
+    color: #eaf7ea !important;
+
+    border: 1px solid rgba(124, 255, 107, 0.18) !important;
+
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+
+    background-color: rgba(255, 255, 255, 0.06) !important;
+
+    color: #ffffff !important;
+
+    -webkit-text-fill-color: #ffffff !important;
+
+    border: 1px solid rgba(124, 255, 107, 0.25) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: rgba(220, 255, 220, 0.55) !important;
+    opacity: 1 !important;
+}
+
+select {
+    color: #ffffff !important;
+}
+
+select option {
+    background: #123d19 !important;
+    color: #ffffff !important;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4 {
+    color: #d6ffd6 !important;
+}
+
+/* Paragraphs */
+p {
+    color: rgba(220, 255, 220, 0.8) !important;
+}
+
+/* Navbar */
+.navbar {
+    background: rgba(5, 20, 10, 0.95) !important;
+
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+
+    border-bottom: 1px solid rgba(124, 255, 107, 0.2) !important;
+}
+
+.nav-links a {
+    color: #eaffea !important;
+}
+
+.logo h2 {
+    color: #b7ff86 !important;
+}
+
+/* Upload button */
+.upload-card button {
+    background: linear-gradient(135deg,
+            #1f7a2e,
+            #34d058) !important;
+
+    color: #ffffff !important;
+}
+
+/* File input */
+input[type="file"] {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* iOS Safari */
+input,
+select,
+textarea,
+button {
+    -webkit-appearance: none;
+    appearance: none;
+    font-size: 16px;
+}
+
+/* Keep file button visible */
+input[type="file"]::-webkit-file-upload-button {
+    background: #eeeeee;
+    color: #111111;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-right: 10px;
+}
+
+/* Prevent iPhone from changing form colors */
+@media (prefers-color-scheme: light),
+(prefers-color-scheme: dark) {
+
+    input,
+    select,
+    textarea {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+}

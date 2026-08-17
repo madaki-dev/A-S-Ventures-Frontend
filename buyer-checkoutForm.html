@@ -166,23 +166,35 @@
 
         </form>
     </div>
+
     <script>
+        const API_URL = "https://a-s-ventures-backend.onrender.com";
 
         const stateSelect = document.getElementById("state");
+        const checkoutForm = document.getElementById("checkoutForm");
 
-        stateSelect.addEventListener("change", async () => {
+        let productsTotal = 0;
+        let transportFee = 0;
 
-            const state = stateSelect.value;
 
-            if (!state) return;
+        // ==========================================
+        // GET CART TOTAL
+        // ==========================================
+
+        async function loadCart() {
 
             const token = localStorage.getItem("token");
 
+            if (!token) {
+                alert("Please login first.");
+                window.location.href = "login.html";
+                return false;
+            }
+
             try {
 
-                // Get cart
                 const cartRes = await fetch(
-                    "https://a-s-ventures-backend.onrender.com/api/cart",
+                    `${API_URL}/api/cart`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -190,33 +202,84 @@
                     }
                 );
 
+                if (cartRes.status === 401 || cartRes.status === 403) {
+
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
+
+                    alert("Your login session has expired. Please login again.");
+                    window.location.href = "login.html";
+
+                    return false;
+                }
+
+                if (!cartRes.ok) {
+                    throw new Error("Could not load cart.");
+                }
+
                 const cart = await cartRes.json();
 
-                let productsTotal = 0;
+                productsTotal = 0;
 
                 cart.forEach(item => {
 
                     if (item.product) {
 
                         productsTotal +=
-                            Number(item.product.sellingPrice) *
-                            Number(item.quantity);
+                            Number(item.product.sellingPrice || item.product.price || 0) *
+                            Number(item.quantity || 1);
 
                     }
 
                 });
 
+                document.getElementById("productsTotal").textContent =
+                    `₦${productsTotal.toLocaleString()}`;
 
-                // Get transportation prices
+                updateTotal();
+
+                return true;
+
+            } catch (error) {
+
+                console.error("Cart error:", error);
+
+                alert("Could not load your cart.");
+
+                return false;
+            }
+        }
+
+
+        // ==========================================
+        // GET TRANSPORT PRICE
+        // ==========================================
+
+        stateSelect.addEventListener("change", async () => {
+
+            const state = stateSelect.value;
+
+            if (!state) {
+                transportFee = 0;
+                updateTotal();
+                return;
+            }
+
+            try {
+
                 const transportRes = await fetch(
-                    "https://a-s-ventures-backend.onrender.com/api/transport/prices"
+                    `${API_URL}/api/transport/prices`
                 );
 
-                const transports =
-                    await transportRes.json();
+                if (!transportRes.ok) {
+                    throw new Error("Could not load transport prices.");
+                }
 
-                const transport =
-                    transports.find(t => t.state === state);
+                const transports = await transportRes.json();
+
+                const transport = transports.find(
+                    t => t.state === state
+                );
 
                 if (!transport) {
 
@@ -224,188 +287,229 @@
                         "Transportation price not available for this state."
                     );
 
-                    return;
+                    transportFee = 0;
+                    updateTotal();
 
+                    return;
                 }
 
-                const transportFee =
-                    Number(transport.transportPrice);
+                transportFee = Number(
+                    transport.transportPrice || 0
+                );
 
-                const total =
-                    productsTotal + transportFee;
-
-
-                document.getElementById("productsTotal")
-                    .textContent =
-                    `₦${productsTotal.toLocaleString()}`;
-
-                document.getElementById("transportFee")
-                    .textContent =
+                document.getElementById("transportFee").textContent =
                     `₦${transportFee.toLocaleString()}`;
 
-                document.getElementById("grandTotal")
-                    .textContent =
-                    `₦${total.toLocaleString()}`;
-
+                updateTotal();
 
             } catch (error) {
 
                 console.error(
-                    "Error calculating checkout:",
+                    "Transportation error:",
                     error
                 );
 
+                alert(
+                    "Could not calculate transportation."
+                );
             }
 
         });
-        document
-            .getElementById("checkoutForm")
-            .addEventListener("submit", async (e) => {
 
-                e.preventDefault();
 
-                const fullname =
-                    document.getElementById("fullname").value.trim();
+        // ==========================================
+        // UPDATE TOTAL
+        // ==========================================
 
-                const phone =
-                    document.getElementById("phone").value.trim();
+        function updateTotal() {
 
-                const whatsapp =
-                    document.getElementById("whatsapp").value.trim();
+            const total =
+                productsTotal + transportFee;
 
-                const state =
-                    document.getElementById("state").value;
+            document.getElementById("grandTotal").textContent =
+                `₦${total.toLocaleString()}`;
+        }
 
-                const address =
-                    document.getElementById("address").value.trim();
 
+        // ==========================================
+        // CHECKOUT
+        // ==========================================
+
+        checkoutForm.addEventListener("submit", async (e) => {
+
+            e.preventDefault();
+
+            const fullname =
+                document.getElementById("fullname").value.trim();
+
+            const phone =
+                document.getElementById("phone").value.trim();
+
+            const whatsapp =
+                document.getElementById("whatsapp").value.trim();
+
+            const state =
+                document.getElementById("state").value;
+
+            const address =
+                document.getElementById("address").value.trim();
+
+            const token =
+                localStorage.getItem("token");
+
+
+            // ==========================================
+            // AUTH CHECK
+            // ==========================================
+
+            if (!token) {
+
+                alert("Please login first.");
+
+                window.location.href =
+                    "login.html";
+
+                return;
+            }
+
+
+            // ==========================================
+            // FORM VALIDATION
+            // ==========================================
+
+            if (
+                !fullname ||
+                !phone ||
+                !whatsapp ||
+                !state ||
+                !address
+            ) {
+
+                alert(
+                    "Please fill in all fields."
+                );
+
+                return;
+            }
+
+
+            try {
+
+                const res = await fetch(
+                    `${API_URL}/api/payment/initialize`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+
+                        body: JSON.stringify({
+
+                            fullname,
+                            phone,
+                            whatsapp,
+                            state,
+                            address
+
+                        })
+                    }
+                );
+
+
+                const data =
+                    await res.json();
+
+
+                // ==========================================
+                // TOKEN EXPIRED / INVALID
+                // ==========================================
 
                 if (
-                    !fullname ||
-                    !phone ||
-                    !whatsapp ||
-                    !state ||
-                    !address
+                    res.status === 401 ||
+                    res.status === 403
                 ) {
 
-                    alert("Please fill in all fields.");
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
 
-                    return;
-
-                }
-
-
-                const token =
-                    localStorage.getItem("token");
-
-
-                const user =
-                    JSON.parse(
-                        localStorage.getItem("user")
+                    alert(
+                        "Your login session has expired. Please login again."
                     );
-
-
-                if (!token || !user) {
-
-                    alert("Please login first.");
 
                     window.location.href =
                         "login.html";
 
                     return;
-
                 }
 
 
-                try {
+                // ==========================================
+                // OTHER ERROR
+                // ==========================================
 
-                    const res = await fetch(
+                if (!res.ok) {
 
-                        "https://a-s-ventures-backend.onrender.com/api/payment/initialize",
-
-                        {
-
-                            method: "POST",
-
-                            headers: {
-
-                                "Content-Type":
-                                    "application/json",
-
-                                Authorization:
-                                    `Bearer ${token}`
-
-                            },
-
-                            body: JSON.stringify({
-
-                                email:
-                                    user.email,
-
-                                fullname,
-
-                                phone,
-
-                                whatsapp,
-
-                                state,
-
-                                address
-
-                            })
-
-                        }
-
+                    console.error(
+                        "Payment initialization failed:",
+                        data
                     );
-
-
-                    const data =
-                        await res.json();
-
-
-                    if (!res.ok) {
-
-                        alert(
-                            data.message ||
-                            "Could not initialize payment."
-                        );
-
-                        return;
-
-                    }
-
-
-                    // Save transaction reference
-                    localStorage.setItem(
-                        "tx_ref",
-                        data.tx_ref
-                    );
-
-                    localStorage.setItem("checkoutDetails", JSON.stringify({
-                        fullname,
-                        phone,
-                        whatsapp,
-                        state,
-                        address
-                    }));
-
-                    // Send buyer to Flutterwave
-                    window.location.href =
-                        data.paymentLink;
-
-
-                } catch (error) {
-
-                    console.error(error);
 
                     alert(
-                        "Something went wrong."
+                        data.message ||
+                        "Could not initialize payment."
                     );
 
+                    return;
                 }
 
-            });
+
+                // ==========================================
+                // FLUTTERWAVE
+                // ==========================================
+
+                if (!data.paymentLink) {
+
+                    console.error(
+                        "No payment link returned:",
+                        data
+                    );
+
+                    alert(
+                        "Payment link was not returned by the server."
+                    );
+
+                    return;
+                }
+
+                window.location.href =
+                    data.paymentLink;
+
+
+            } catch (error) {
+
+                console.error(
+                    "Checkout error:",
+                    error
+                );
+
+                alert(
+                    "Something went wrong while starting payment."
+                );
+            }
+
+        });
+
+
+        // ==========================================
+        // LOAD CART WHEN PAGE OPENS
+        // ==========================================
+
+        loadCart();
+
     </script>
+
 </body>
 
 </html>
