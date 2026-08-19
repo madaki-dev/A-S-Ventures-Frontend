@@ -181,6 +181,45 @@
 
         }
 
+        .marketplace-link {
+            display: inline-block;
+
+            margin-top: 15px;
+
+            padding: 13px 25px;
+
+            border-radius: 10px;
+
+            background: linear-gradient(135deg,
+                    #1f7a2e,
+                    #34d058);
+
+            color: white !important;
+
+            font-weight: 700;
+
+            text-decoration: none;
+
+            border: 1px solid rgba(124, 255, 107, .5);
+
+            box-shadow:
+                0 5px 20px rgba(52, 208, 88, .25);
+
+            transition: .3s;
+        }
+
+        .marketplace-link:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 8px 30px rgba(52, 208, 88, .5);
+
+            background: linear-gradient(135deg,
+                    #34d058,
+                    #1f7a2e);
+        }
+
+
 
         @keyframes spin {
 
@@ -253,6 +292,12 @@
         <a id="backButton" class="back-btn" href="orders.html">
 
             View My Orders
+
+        </a>
+
+        <a class="marketplace-link">
+
+            Back to marketplace
 
         </a>
 
