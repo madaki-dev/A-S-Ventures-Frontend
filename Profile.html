@@ -331,11 +331,20 @@
                         }
 
 
-                        // Show uploaded image immediately
+                        // Show Cloudinary image immediately
 
-                        document.getElementById("profilePic").src =
-                            `https://a-s-ventures-backend.onrender.com/upload/${data.filename}`;
+                        if (data.imageUrl) {
 
+                            document.getElementById("profilePic").src =
+                                data.imageUrl;
+
+                        } else {
+
+                            alert("Upload succeeded, but no image URL was returned.");
+
+                            return;
+
+                        }
 
                         alert(
                             "Profile picture uploaded successfully!"
