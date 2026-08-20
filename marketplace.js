@@ -29,9 +29,7 @@ function renderProducts(products) {
     products.forEach(product => {
 
         const imgSrc =
-            product.image?.startsWith("http")
-                ? product.image
-                : `${API}/uploads/${product.image}`;
+            product.image;
 
         container.innerHTML += `
 
