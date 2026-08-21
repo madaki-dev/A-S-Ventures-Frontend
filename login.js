@@ -14,14 +14,14 @@ togglePassword.addEventListener("click", () => {
 
         passwordInput.type = "text";
 
-        togglePassword.src = "eye-off.png";
+        togglePassword.src = "hide.png";
         togglePassword.alt = "Hide password";
 
     } else {
 
         passwordInput.type = "password";
 
-        togglePassword.src = "eye.png";
+        togglePassword.src = "view.png";
         togglePassword.alt = "Show password";
 
     }
