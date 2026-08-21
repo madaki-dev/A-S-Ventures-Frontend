@@ -21,23 +21,28 @@
         <h2>A&S Agri</h2>
       </div>
 
-      <ul class="nav-links" id="navi">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="marketplace.html">Marketplace</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="Profile.html">Profile</a></li>
-      </ul>
+      <div class="mobile-nav-panel" id="mobileNavPanel">
 
-      <div class="nav-buttons" id="navButtons">
-        ...
+        <ul class="nav-links" id="navi">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="marketplace.html">Marketplace</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="Profile.html">Profile</a></li>
+        </ul>
+
+        <div class="nav-buttons" id="navButtons">
+          <!-- YOUR EXISTING CONTENT -->
+        </div>
+
       </div>
 
       <button class="mobile-menu-btn" id="mobileMenuBtn">
         <i class="fas fa-bars"></i>
       </button>
 
+    </nav>
     </nav>
   </header>
 
@@ -182,16 +187,19 @@
       const mobileMenuBtn =
         document.getElementById("mobileMenuBtn");
 
-      if (mobileMenuBtn && nav) {
+      const mobileNavPanel =
+        document.getElementById("mobileNavPanel");
+
+      if (mobileMenuBtn && mobileNavPanel) {
 
         mobileMenuBtn.addEventListener("click", () => {
 
-          nav.classList.toggle("active");
+          mobileNavPanel.classList.toggle("active");
 
           const icon =
             mobileMenuBtn.querySelector("i");
 
-          if (nav.classList.contains("active")) {
+          if (mobileNavPanel.classList.contains("active")) {
 
             icon.classList.remove("fa-bars");
             icon.classList.add("fa-xmark");
@@ -205,17 +213,14 @@
 
             document.body.style.overflow = "";
           }
-
         });
 
 
-        /* Close menu when navigation link is clicked */
-
-        nav.querySelectorAll("a").forEach(link => {
+        mobileNavPanel.querySelectorAll("a").forEach(link => {
 
           link.addEventListener("click", () => {
 
-            nav.classList.remove("active");
+            mobileNavPanel.classList.remove("active");
 
             const icon =
               mobileMenuBtn.querySelector("i");
@@ -224,11 +229,9 @@
             icon.classList.add("fa-bars");
 
             document.body.style.overflow = "";
-
           });
 
         });
-
       }
 
 
