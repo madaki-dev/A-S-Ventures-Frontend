@@ -3219,3 +3219,108 @@ input[type="file"]::-webkit-file-upload-button {
 .logout-btn:active {
     transform: scale(0.97);
 }
+
+/* ==========================================
+   A&S MOBILE NAVBAR - VERTICAL LAYOUT
+========================================== */
+
+@media (max-width: 768px) {
+
+    .navbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
+        padding: 18px 20px;
+    }
+
+    /* Logo centered at the top */
+    .logo {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .logo h2 {
+        font-size: 1.5rem;
+    }
+
+    /* Navigation becomes vertical */
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+        gap: 0;
+        width: 100%;
+        list-style: none;
+    }
+
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-links a {
+        display: block;
+        width: 100%;
+        padding: 11px 10px;
+        border-bottom: 1px solid rgba(124, 255, 107, 0.12);
+    }
+
+    /* Remove the little hover underline on mobile */
+    .nav-links a::after {
+        display: none;
+    }
+
+    /* Login / Get Started / Profile */
+    .nav-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .login-btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .dropdown {
+        width: 100%;
+    }
+
+    .get-started {
+        width: 100%;
+        padding: 12px;
+    }
+
+    /* Dropdown stays usable on mobile */
+    .dropdown-content {
+        position: static;
+        width: 100%;
+        min-width: 0;
+        margin-top: 8px;
+        border-radius: 10px;
+    }
+
+    .dropdown-content a {
+        text-align: center;
+    }
+
+    /* Profile picture */
+    .profile-nav {
+        margin: 0 auto;
+        width: 48px;
+        height: 48px;
+    }
+
+    /* Logout button */
+    .logout-btn {
+        width: 100%;
+        padding: 11px;
+    }
+
+}

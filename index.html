@@ -20,6 +20,10 @@
         <h2>A&S Agri</h2>
       </div>
 
+      <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+
       <ul class="nav-links" id="navi">
         <li><a href="index.html">Home</a></li>
         <li><a href="services.html">Services</a></li>
@@ -406,6 +410,17 @@
         );
 
       }
+
+      const menuToggle = document.getElementById("menuToggle");
+      const navLinks = document.getElementById("navi");
+      const navButtons = document.getElementById("navButtons");
+
+      menuToggle.addEventListener("click", () => {
+
+        navLinks.classList.toggle("active");
+        navButtons.classList.toggle("active");
+
+      });
 
     });
   </script>
