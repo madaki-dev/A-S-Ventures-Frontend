@@ -67,143 +67,175 @@
   </footer>
   <script>
 
+    console.log("🔥 CONTACT SCRIPT LOADED");
+
     const contactForm =
       document.getElementById("contactForm");
 
-
-    contactForm.addEventListener(
-      "submit",
-      async function (e) {
-
-        e.preventDefault();
+    console.log("FORM:", contactForm);
 
 
-        const name =
-          document
-            .getElementById("contactName")
-            .value
-            .trim();
+    if (contactForm) {
 
-        const email =
-          document
-            .getElementById("contactEmail")
-            .value
-            .trim();
+      contactForm.addEventListener(
+        "submit",
+        async function (e) {
 
-        const subject =
-          document
-            .getElementById("contactSubject")
-            .value
-            .trim();
+          e.preventDefault();
 
-        const message =
-          document
-            .getElementById("contactMessage")
-            .value
-            .trim();
+          console.log("🔥 SEND BUTTON CLICKED");
 
 
-        // ==============================
-        // VALIDATION
-        // ==============================
+          const name =
+            document
+              .getElementById("contactName")
+              .value
+              .trim();
 
-        if (!name || !email || !message) {
+          const email =
+            document
+              .getElementById("contactEmail")
+              .value
+              .trim();
 
-          alert(
-            "Please complete your name, email and message."
-          );
+          const subject =
+            document
+              .getElementById("contactSubject")
+              .value
+              .trim();
 
-          return;
-        }
-
-
-        // ==============================
-        // SEND TO BACKEND
-        // ==============================
-
-        try {
-
-          const res =
-            await fetch(
-              "https://a-s-ventures-backend.onrender.com/api/contact",
-              {
-                method: "POST",
-
-                headers: {
-                  "Content-Type":
-                    "application/json"
-                },
-
-                body: JSON.stringify({
-
-                  name,
-                  email,
-                  subject,
-                  message
-
-                })
-              }
-            );
+          const message =
+            document
+              .getElementById("contactMessage")
+              .value
+              .trim();
 
 
-          const text = await res.text();
-
-          console.log("CONTACT SERVER RESPONSE:", text);
-
-          let data;
-
-          try {
-            data = JSON.parse(text);
-          } catch {
-            throw new Error(
-              `Server returned ${res.status}: ${text}`
-            );
-          }
-
-          console.log(
-            "CONTACT RESPONSE:",
-            data
-          );
+          console.log("FORM DATA:", {
+            name,
+            email,
+            subject,
+            message
+          });
 
 
-          if (!res.ok) {
+          if (!name || !email || !message) {
 
             alert(
-              data.message ||
-              "Failed to send message."
+              "Please complete your name, email and message."
             );
 
             return;
           }
 
 
-          // ==============================
-          // SUCCESS
-          // ==============================
-
-          alert(
-            "Message sent successfully! We'll get back to you soon."
-          );
+          console.log("🔥 SENDING REQUEST TO BACKEND");
 
 
-          contactForm.reset();
+          try {
+
+            const res =
+              await fetch(
+                "https://a-s-ventures-backend.onrender.com/api/contact",
+                {
+                  method: "POST",
+
+                  headers: {
+                    "Content-Type":
+                      "application/json"
+                  },
+
+                  body: JSON.stringify({
+
+                    name,
+                    email,
+                    subject,
+                    message
+
+                  })
+                }
+              );
 
 
-        } catch (error) {
+            console.log(
+              "🔥 SERVER STATUS:",
+              res.status
+            );
 
-          console.error(
-            "CONTACT FORM ERROR:",
-            error
-          );
 
-          alert(
-            "Unable to send your message. Please try again later."
-          );
+            const text =
+              await res.text();
+
+
+            console.log(
+              "🔥 SERVER RESPONSE:",
+              text
+            );
+
+
+            let data;
+
+            try {
+
+              data =
+                JSON.parse(text);
+
+            } catch {
+
+              console.error(
+                "SERVER DID NOT RETURN JSON"
+              );
+
+              alert(
+                `Server error (${res.status}). Check console.`
+              );
+
+              return;
+            }
+
+
+            if (!res.ok) {
+
+              alert(
+                data.message ||
+                "Failed to send message."
+              );
+
+              return;
+            }
+
+
+            alert(
+              "Message sent successfully!"
+            );
+
+
+            contactForm.reset();
+
+
+          } catch (error) {
+
+            console.error(
+              "🔥 CONTACT ERROR:",
+              error
+            );
+
+            alert(
+              "Unable to connect to the server."
+            );
+
+          }
 
         }
+      );
 
-      }
-    );
+    } else {
+
+      console.error(
+        "❌ contactForm was NOT found!"
+      );
+
+    }
 
   </script>
 </body>
