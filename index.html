@@ -16,46 +16,63 @@
 <body>
   <header>
     <nav class="navbar">
+
       <div class="logo">
         <h2>A&S Agri</h2>
       </div>
 
-      <button class="menu-toggle" id="menuToggle">
+      <!-- Hamburger -->
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
         <i class="fas fa-bars"></i>
       </button>
 
-      <ul class="nav-links" id="navi">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="marketplace.html">Marketplace</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="Profile.html">Profile</a></li>
-      </ul>
-      <div class="nav-buttons" id="navButtons">
+      <!-- Mobile overlay -->
+      <div class="menu-overlay" id="menuOverlay"></div>
 
-        <!-- Shown when logged out -->
-        <a href="login.html" class="login-btn" id="loginBtn">
-          Login
-        </a>
+      <!-- Navigation -->
+      <div class="mobile-menu" id="mobileMenu">
 
-        <div class="dropdown" id="getStartedDropdown">
-          <button class="get-started">
-            Get Started
-            <i class="fas fa-chevron-down"></i>
-          </button>
+        <button class="close-menu" id="closeMenu">
+          <i class="fas fa-xmark"></i>
+        </button>
 
-          <div class="dropdown-content">
-            <a href="farmer-register.html">
-              Register Your Account
-            </a>
+        <ul class="nav-links" id="navi">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="marketplace.html">Marketplace</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="Profile.html">Profile</a></li>
+        </ul>
+
+        <div class="nav-buttons" id="navButtons">
+
+          <a href="login.html" class="login-btn" id="loginBtn">
+            Login
+          </a>
+
+          <div class="dropdown" id="getStartedDropdown">
+
+            <button class="get-started">
+              Get Started
+              <i class="fas fa-chevron-down"></i>
+            </button>
+
+            <div class="dropdown-content">
+              <a href="farmer-register.html">
+                Register Your Account
+              </a>
+            </div>
+
           </div>
-        </div>
 
-        <!-- Shown when logged in -->
-        <a href="Profile.html" class="profile-nav" id="profileNav" style="display: none;">
-          <img id="navProfileImage" src="" alt="Profile">
-        </a>
+          <a href="Profile.html" class="profile-nav" id="profileNav" style="display: none;">
+
+            <img id="navProfileImage" src="" alt="Profile">
+
+          </a>
+
+        </div>
 
         <button id="logoutBtn" class="logout-btn">
           <i class="fas fa-right-from-bracket"></i>
@@ -63,6 +80,7 @@
         </button>
 
       </div>
+
     </nav>
   </header>
 
@@ -410,17 +428,75 @@
         );
 
       }
+    });
+    /* ==========================================
+   MOBILE MENU
+========================================== */
 
-      const menuToggle = document.getElementById("menuToggle");
-      const navLinks = document.getElementById("navi");
-      const navButtons = document.getElementById("navButtons");
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    const closeMenu = document.getElementById("closeMenu");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const menuOverlay = document.getElementById("menuOverlay");
 
-      menuToggle.addEventListener("click", () => {
 
-        navLinks.classList.toggle("active");
-        navButtons.classList.toggle("active");
+    function openMobileMenu() {
 
-      });
+      mobileMenu.classList.add("active");
+      menuOverlay.classList.add("active");
+
+      document.body.classList.add("menu-open");
+    }
+
+
+    function closeMobileMenu() {
+
+      mobileMenu.classList.remove("active");
+      menuOverlay.classList.remove("active");
+
+      document.body.classList.remove("menu-open");
+    }
+
+
+    if (hamburgerBtn) {
+
+      hamburgerBtn.addEventListener(
+        "click",
+        openMobileMenu
+      );
+
+    }
+
+
+    if (closeMenu) {
+
+      closeMenu.addEventListener(
+        "click",
+        closeMobileMenu
+      );
+
+    }
+
+
+    if (menuOverlay) {
+
+      menuOverlay.addEventListener(
+        "click",
+        closeMobileMenu
+      );
+
+    }
+
+
+    /* Close menu when a navigation link is clicked */
+
+    document.querySelectorAll(
+      ".mobile-menu .nav-links a"
+    ).forEach(link => {
+
+      link.addEventListener(
+        "click",
+        closeMobileMenu
+      );
 
     });
   </script>
