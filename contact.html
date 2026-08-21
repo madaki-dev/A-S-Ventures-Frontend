@@ -33,16 +33,20 @@
     <div class="contact-card">
       <h2>Get In Touch</h2>
 
-      <form>
-        <input type="text" placeholder="Full Name" />
+      <form id="contactForm">
 
-        <input type="email" placeholder="Email Address" />
+        <input type="text" id="contactName" placeholder="Full Name" required />
 
-        <input type="text" placeholder="Subject" />
+        <input type="email" id="contactEmail" placeholder="Email Address" required />
 
-        <textarea placeholder="Your Message"></textarea>
+        <input type="text" id="contactSubject" placeholder="Subject" />
 
-        <button type="submit">Send Message</button>
+        <textarea id="contactMessage" placeholder="Your Message" required></textarea>
+
+        <button type="submit">
+          Send Message
+        </button>
+
       </form>
     </div>
   </section>
@@ -61,6 +65,137 @@
       </div>
     </div>
   </footer>
+  <script>
+
+    const contactForm =
+      document.getElementById("contactForm");
+
+
+    contactForm.addEventListener(
+      "submit",
+      async function (e) {
+
+        e.preventDefault();
+
+
+        const name =
+          document
+            .getElementById("contactName")
+            .value
+            .trim();
+
+        const email =
+          document
+            .getElementById("contactEmail")
+            .value
+            .trim();
+
+        const subject =
+          document
+            .getElementById("contactSubject")
+            .value
+            .trim();
+
+        const message =
+          document
+            .getElementById("contactMessage")
+            .value
+            .trim();
+
+
+        // ==============================
+        // VALIDATION
+        // ==============================
+
+        if (!name || !email || !message) {
+
+          alert(
+            "Please complete your name, email and message."
+          );
+
+          return;
+        }
+
+
+        // ==============================
+        // SEND TO BACKEND
+        // ==============================
+
+        try {
+
+          const res =
+            await fetch(
+              "https://a-s-ventures-backend.onrender.com/api/contact",
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body: JSON.stringify({
+
+                  name,
+                  email,
+                  subject,
+                  message
+
+                })
+              }
+            );
+
+
+          const data =
+            await res.json();
+
+
+          console.log(
+            "CONTACT RESPONSE:",
+            data
+          );
+
+
+          if (!res.ok) {
+
+            alert(
+              data.message ||
+              "Failed to send message."
+            );
+
+            return;
+          }
+
+
+          // ==============================
+          // SUCCESS
+          // ==============================
+
+          alert(
+            "Message sent successfully! We'll get back to you soon."
+          );
+
+
+          contactForm.reset();
+
+
+        } catch (error) {
+
+          console.error(
+            "CONTACT FORM ERROR:",
+            error
+          );
+
+          alert(
+            "Unable to send your message. Please try again later."
+          );
+
+        }
+
+      }
+    );
+
+  </script>
 </body>
 
 </html>
