@@ -3164,3 +3164,27 @@ input[type="file"]::-webkit-file-upload-button {
 
     display: block;
 }
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 50px;
+}
+
+.password-eye {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 24px;
+    height: 24px;
+
+    object-fit: contain;
+    cursor: pointer;
+}
