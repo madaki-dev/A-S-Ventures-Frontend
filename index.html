@@ -21,65 +21,22 @@
         <h2>A&S Agri</h2>
       </div>
 
-      <!-- Hamburger -->
-      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+      <ul class="nav-links" id="navi">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="Profile.html">Profile</a></li>
+      </ul>
+
+      <div class="nav-buttons" id="navButtons">
+        ...
+      </div>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
         <i class="fas fa-bars"></i>
       </button>
-
-      <!-- Mobile overlay -->
-      <div class="menu-overlay" id="menuOverlay"></div>
-
-      <!-- Navigation -->
-      <div class="mobile-menu" id="mobileMenu">
-
-        <button class="close-menu" id="closeMenu">
-          <i class="fas fa-xmark"></i>
-        </button>
-
-        <ul class="nav-links" id="navi">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="marketplace.html">Marketplace</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="Profile.html">Profile</a></li>
-        </ul>
-
-        <div class="nav-buttons" id="navButtons">
-
-          <a href="login.html" class="login-btn" id="loginBtn">
-            Login
-          </a>
-
-          <div class="dropdown" id="getStartedDropdown">
-
-            <button class="get-started">
-              Get Started
-              <i class="fas fa-chevron-down"></i>
-            </button>
-
-            <div class="dropdown-content">
-              <a href="farmer-register.html">
-                Register Your Account
-              </a>
-            </div>
-
-          </div>
-
-          <a href="Profile.html" class="profile-nav" id="profileNav" style="display: none;">
-
-            <img id="navProfileImage" src="" alt="Profile">
-
-          </a>
-
-        </div>
-
-        <button id="logoutBtn" class="logout-btn">
-          <i class="fas fa-right-from-bracket"></i>
-          Logout
-        </button>
-
-      </div>
 
     </nav>
   </header>
@@ -218,10 +175,66 @@
       const nav =
         document.getElementById("navi");
 
+      /* ==========================================
+         MOBILE MENU
+      ========================================== */
 
-      // ==========================================
-      // LOGOUT
-      // ==========================================
+      const mobileMenuBtn =
+        document.getElementById("mobileMenuBtn");
+
+      if (mobileMenuBtn && nav) {
+
+        mobileMenuBtn.addEventListener("click", () => {
+
+          nav.classList.toggle("active");
+
+          const icon =
+            mobileMenuBtn.querySelector("i");
+
+          if (nav.classList.contains("active")) {
+
+            icon.classList.remove("fa-bars");
+            icon.classList.add("fa-xmark");
+
+            document.body.style.overflow = "hidden";
+
+          } else {
+
+            icon.classList.remove("fa-xmark");
+            icon.classList.add("fa-bars");
+
+            document.body.style.overflow = "";
+          }
+
+        });
+
+
+        /* Close menu when navigation link is clicked */
+
+        nav.querySelectorAll("a").forEach(link => {
+
+          link.addEventListener("click", () => {
+
+            nav.classList.remove("active");
+
+            const icon =
+              mobileMenuBtn.querySelector("i");
+
+            icon.classList.remove("fa-xmark");
+            icon.classList.add("fa-bars");
+
+            document.body.style.overflow = "";
+
+          });
+
+        });
+
+      }
+
+
+      /* ==========================================
+         LOGOUT
+      ========================================== */
 
       if (logoutBtn) {
 
@@ -238,9 +251,6 @@
             localStorage.removeItem("token");
             localStorage.removeItem("accountType");
 
-            // Optional: remove anything else
-            // related to the logged-in user here.
-
             window.location.href = "login.html";
 
           });
@@ -250,9 +260,9 @@
       }
 
 
-      // ==========================================
-      // USER IS NOT LOGGED IN
-      // ==========================================
+      /* ==========================================
+         USER NOT LOGGED IN
+      ========================================== */
 
       if (!token) {
 
@@ -263,9 +273,9 @@
       }
 
 
-      // ==========================================
-      // GET USER PROFILE
-      // ==========================================
+      /* ==========================================
+         GET USER PROFILE
+      ========================================== */
 
       try {
 
@@ -284,9 +294,9 @@
         console.log("PROFILE DATA:", user);
 
 
-        // ==========================================
-        // INVALID / EXPIRED TOKEN
-        // ==========================================
+        /* ==========================================
+           INVALID TOKEN
+        ========================================== */
 
         if (!res.ok) {
 
@@ -307,36 +317,36 @@
         }
 
 
-        // ==========================================
-        // HIDE LOGIN
-        // ==========================================
+        /* ==========================================
+           HIDE LOGIN
+        ========================================== */
 
         if (loginBtn) {
           loginBtn.style.display = "none";
         }
 
 
-        // ==========================================
-        // HIDE GET STARTED
-        // ==========================================
+        /* ==========================================
+           HIDE GET STARTED
+        ========================================== */
 
         if (getStartedDropdown) {
           getStartedDropdown.style.display = "none";
         }
 
 
-        // ==========================================
-        // SHOW PROFILE
-        // ==========================================
+        /* ==========================================
+           SHOW PROFILE
+        ========================================== */
 
         if (profileNav) {
           profileNav.style.display = "flex";
         }
 
 
-        // ==========================================
-        // PROFILE IMAGE
-        // ==========================================
+        /* ==========================================
+           PROFILE IMAGE
+        ========================================== */
 
         if (
           user.profileImage &&
@@ -358,9 +368,9 @@
         }
 
 
-        // ==========================================
-        // ADMIN
-        // ==========================================
+        /* ==========================================
+           ADMIN
+        ========================================== */
 
         if (
           user.role === "Admin" &&
@@ -389,9 +399,9 @@
         }
 
 
-        // ==========================================
-        // FARMER
-        // ==========================================
+        /* ==========================================
+           FARMER
+        ========================================== */
 
         if (
           user.accountType === "Farmer" &&
@@ -428,75 +438,6 @@
         );
 
       }
-    });
-    /* ==========================================
-   MOBILE MENU
-========================================== */
-
-    const hamburgerBtn = document.getElementById("hamburgerBtn");
-    const closeMenu = document.getElementById("closeMenu");
-    const mobileMenu = document.getElementById("mobileMenu");
-    const menuOverlay = document.getElementById("menuOverlay");
-
-
-    function openMobileMenu() {
-
-      mobileMenu.classList.add("active");
-      menuOverlay.classList.add("active");
-
-      document.body.classList.add("menu-open");
-    }
-
-
-    function closeMobileMenu() {
-
-      mobileMenu.classList.remove("active");
-      menuOverlay.classList.remove("active");
-
-      document.body.classList.remove("menu-open");
-    }
-
-
-    if (hamburgerBtn) {
-
-      hamburgerBtn.addEventListener(
-        "click",
-        openMobileMenu
-      );
-
-    }
-
-
-    if (closeMenu) {
-
-      closeMenu.addEventListener(
-        "click",
-        closeMobileMenu
-      );
-
-    }
-
-
-    if (menuOverlay) {
-
-      menuOverlay.addEventListener(
-        "click",
-        closeMobileMenu
-      );
-
-    }
-
-
-    /* Close menu when a navigation link is clicked */
-
-    document.querySelectorAll(
-      ".mobile-menu .nav-links a"
-    ).forEach(link => {
-
-      link.addEventListener(
-        "click",
-        closeMobileMenu
-      );
 
     });
   </script>
