@@ -175,27 +175,56 @@
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
 
-      const token =
-        localStorage.getItem("token");
+      const token = localStorage.getItem("token");
+
+      const logoutBtn =
+        document.getElementById("logoutBtn");
 
       const loginBtn =
         document.getElementById("loginBtn");
 
       const getStartedDropdown =
-        document.getElementById(
-          "getStartedDropdown"
-        );
+        document.getElementById("getStartedDropdown");
 
       const profileNav =
         document.getElementById("profileNav");
 
       const navProfileImage =
-        document.getElementById(
-          "navProfileImage"
-        );
+        document.getElementById("navProfileImage");
 
       const nav =
         document.getElementById("navi");
+
+
+      // ==========================================
+      // LOGOUT
+      // ==========================================
+
+      if (logoutBtn) {
+
+        if (!token) {
+
+          logoutBtn.style.display = "none";
+
+        } else {
+
+          logoutBtn.style.display = "block";
+
+          logoutBtn.addEventListener("click", () => {
+
+            localStorage.removeItem("token");
+            localStorage.removeItem("accountType");
+
+            // Optional: remove anything else
+            // related to the logged-in user here.
+
+            window.location.href = "login.html";
+
+          });
+
+        }
+
+      }
 
 
       // ==========================================
@@ -204,11 +233,10 @@
 
       if (!token) {
 
-        console.log(
-          "No login token found."
-        );
+        console.log("No login token found.");
 
         return;
+
       }
 
 
@@ -218,30 +246,23 @@
 
       try {
 
-        const res =
-          await fetch(
-            "https://a-s-ventures-backend.onrender.com/api/profile",
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`
-              }
+        const res = await fetch(
+          "https://a-s-ventures-backend.onrender.com/api/profile",
+          {
+            headers: {
+              Authorization:
+                `Bearer ${token}`
             }
-          );
-
-
-        const user =
-          await res.json();
-
-
-        console.log(
-          "PROFILE DATA:",
-          user
+          }
         );
+
+        const user = await res.json();
+
+        console.log("PROFILE DATA:", user);
 
 
         // ==========================================
-        // TOKEN IS INVALID / EXPIRED
+        // INVALID / EXPIRED TOKEN
         // ==========================================
 
         if (!res.ok) {
@@ -251,10 +272,15 @@
             user
           );
 
-          // Remove invalid token
           localStorage.removeItem("token");
+          localStorage.removeItem("accountType");
+
+          if (logoutBtn) {
+            logoutBtn.style.display = "none";
+          }
 
           return;
+
         }
 
 
@@ -263,10 +289,7 @@
         // ==========================================
 
         if (loginBtn) {
-
-          loginBtn.style.display =
-            "none";
-
+          loginBtn.style.display = "none";
         }
 
 
@@ -275,10 +298,7 @@
         // ==========================================
 
         if (getStartedDropdown) {
-
-          getStartedDropdown.style.display =
-            "none";
-
+          getStartedDropdown.style.display = "none";
         }
 
 
@@ -287,15 +307,12 @@
         // ==========================================
 
         if (profileNav) {
-
-          profileNav.style.display =
-            "flex";
-
+          profileNav.style.display = "flex";
         }
 
 
         // ==========================================
-        // LOAD PROFILE IMAGE
+        // PROFILE IMAGE
         // ==========================================
 
         if (
@@ -307,9 +324,6 @@
             user.profileImage;
 
         } else {
-
-          // No profile picture yet
-          // Use a default placeholder
 
           navProfileImage.src =
             "https://ui-avatars.com/api/?name=" +
@@ -330,7 +344,6 @@
           nav
         ) {
 
-          // Prevent duplicate link
           if (
             !document.getElementById(
               "adminDashboardLink"
@@ -392,31 +405,6 @@
         );
 
       }
-
-      document.addEventListener("DOMContentLoaded", () => {
-
-        const token = localStorage.getItem("token");
-        const logoutBtn = document.getElementById("logoutBtn");
-
-        if (!logoutBtn) return;
-
-        if (!token) {
-          logoutBtn.style.display = "none";
-          return;
-        }
-
-        logoutBtn.style.display = "block";
-
-        logoutBtn.addEventListener("click", () => {
-
-          localStorage.removeItem("token");
-          localStorage.removeItem("accountType");
-
-          window.location.href = "login.html";
-
-        });
-
-      });
 
     });
   </script>
