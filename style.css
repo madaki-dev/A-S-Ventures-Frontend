@@ -3188,3 +3188,29 @@ input[type="file"]::-webkit-file-upload-button {
     object-fit: contain;
     cursor: pointer;
 }
+
+.logout-btn {
+    background: #042b0d;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    padding: 10px 20px;
+    border-radius: 8px;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: #009900;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 153, 0, 0.3);
+}
+
+.logout-btn:active {
+    transform: translateY(0);
+}
