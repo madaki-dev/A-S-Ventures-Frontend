@@ -54,6 +54,9 @@
         </a>
 
       </div>
+      <button id="logoutBtn" class="logout-btn">
+        Logout
+      </button>
     </nav>
   </header>
 
@@ -388,6 +391,31 @@
         );
 
       }
+
+      document.addEventListener("DOMContentLoaded", () => {
+
+        const token = localStorage.getItem("token");
+        const logoutBtn = document.getElementById("logoutBtn");
+
+        if (!logoutBtn) return;
+
+        if (!token) {
+          logoutBtn.style.display = "none";
+          return;
+        }
+
+        logoutBtn.style.display = "block";
+
+        logoutBtn.addEventListener("click", () => {
+
+          localStorage.removeItem("token");
+          localStorage.removeItem("accountType");
+
+          window.location.href = "login.html";
+
+        });
+
+      });
 
     });
   </script>
