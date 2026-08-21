@@ -28,20 +28,31 @@
         <li><a href="contact.html">Contact</a></li>
         <li><a href="Profile.html">Profile</a></li>
       </ul>
+      <div class="nav-buttons" id="navButtons">
 
-      <div class="nav-buttons">
-        <a href="login.html" class="login-btn"> Login </a>
+        <!-- Shown when logged out -->
+        <a href="login.html" class="login-btn" id="loginBtn">
+          Login
+        </a>
 
-        <div class="dropdown">
+        <div class="dropdown" id="getStartedDropdown">
           <button class="get-started">
             Get Started
             <i class="fas fa-chevron-down"></i>
           </button>
 
           <div class="dropdown-content">
-            <a href="farmer-register.html">Register Your Account</a>
+            <a href="farmer-register.html">
+              Register Your Account
+            </a>
           </div>
         </div>
+
+        <!-- Shown when logged in -->
+        <a href="Profile.html" class="profile-nav" id="profileNav" style="display: none;">
+          <img id="navProfileImage" src="" alt="Profile">
+        </a>
+
       </div>
     </nav>
   </header>
@@ -160,71 +171,214 @@
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
 
-      const token = localStorage.getItem("token");
+      const token =
+        localStorage.getItem("token");
+
+      const loginBtn =
+        document.getElementById("loginBtn");
+
+      const getStartedDropdown =
+        document.getElementById(
+          "getStartedDropdown"
+        );
+
+      const profileNav =
+        document.getElementById("profileNav");
+
+      const navProfileImage =
+        document.getElementById(
+          "navProfileImage"
+        );
+
+      const nav =
+        document.getElementById("navi");
+
+
+      // ==========================================
+      // USER IS NOT LOGGED IN
+      // ==========================================
 
       if (!token) {
-        console.log("No login token found.");
+
+        console.log(
+          "No login token found."
+        );
+
         return;
       }
 
+
+      // ==========================================
+      // GET USER PROFILE
+      // ==========================================
+
       try {
 
-        const res = await fetch(
-          "https://a-s-ventures-backend.onrender.com/api/profile",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
+        const res =
+          await fetch(
+            "https://a-s-ventures-backend.onrender.com/api/profile",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
             }
-          }
+          );
+
+
+        const user =
+          await res.json();
+
+
+        console.log(
+          "PROFILE DATA:",
+          user
         );
 
-        const user = await res.json();
 
-        console.log("PROFILE DATA:", user);
+        // ==========================================
+        // TOKEN IS INVALID / EXPIRED
+        // ==========================================
 
         if (!res.ok) {
-          console.error("Profile request failed:", user);
+
+          console.error(
+            "Profile request failed:",
+            user
+          );
+
+          // Remove invalid token
+          localStorage.removeItem("token");
+
           return;
         }
 
-        const nav = document.getElementById("navi");
 
-        if (!nav) {
-          console.error("Navbar #navi was not found.");
-          return;
+        // ==========================================
+        // HIDE LOGIN
+        // ==========================================
+
+        if (loginBtn) {
+
+          loginBtn.style.display =
+            "none";
+
         }
 
+
+        // ==========================================
+        // HIDE GET STARTED
+        // ==========================================
+
+        if (getStartedDropdown) {
+
+          getStartedDropdown.style.display =
+            "none";
+
+        }
+
+
+        // ==========================================
+        // SHOW PROFILE
+        // ==========================================
+
+        if (profileNav) {
+
+          profileNav.style.display =
+            "flex";
+
+        }
+
+
+        // ==========================================
+        // LOAD PROFILE IMAGE
+        // ==========================================
+
+        if (
+          user.profileImage &&
+          user.profileImage.trim() !== ""
+        ) {
+
+          navProfileImage.src =
+            user.profileImage;
+
+        } else {
+
+          // No profile picture yet
+          // Use a default placeholder
+
+          navProfileImage.src =
+            "https://ui-avatars.com/api/?name=" +
+            encodeURIComponent(
+              user.fullName || "User"
+            ) +
+            "&background=042b0d&color=ffffff";
+
+        }
+
+
+        // ==========================================
         // ADMIN
-        if (user.role === "Admin") {
+        // ==========================================
 
-          nav.insertAdjacentHTML(
-            "beforeend",
-            `
-                <li>
-                    <a href="admin-dashboard.html">
-                        Admin DB
-                    </a>
-                </li>
-                `
-          );
+        if (
+          user.role === "Admin" &&
+          nav
+        ) {
+
+          // Prevent duplicate link
+          if (
+            !document.getElementById(
+              "adminDashboardLink"
+            )
+          ) {
+
+            nav.insertAdjacentHTML(
+              "beforeend",
+              `
+                    <li id="adminDashboardLink">
+                        <a href="admin-dashboard.html">
+                            Admin DB
+                        </a>
+                    </li>
+                    `
+            );
+
+          }
 
         }
 
+
+        // ==========================================
         // FARMER
-        if (user.accountType === "Farmer") {
+        // ==========================================
 
-          nav.insertAdjacentHTML(
-            "beforeend",
-            `
-                <li>
-                    <a href="farmer-dashboard.html">
-                        Farmer DB
-                    </a>
-                </li>
-                `
-          );
+        if (
+          user.accountType === "Farmer" &&
+          nav
+        ) {
+
+          if (
+            !document.getElementById(
+              "farmerDashboardLink"
+            )
+          ) {
+
+            nav.insertAdjacentHTML(
+              "beforeend",
+              `
+                    <li id="farmerDashboardLink">
+                        <a href="farmer-dashboard.html">
+                            Farmer DB
+                        </a>
+                    </li>
+                    `
+            );
+
+          }
 
         }
+
 
       } catch (error) {
 

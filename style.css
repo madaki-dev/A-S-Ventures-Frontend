@@ -3123,3 +3123,44 @@ input[type="file"]::-webkit-file-upload-button {
         -webkit-text-fill-color: #ffffff !important;
     }
 }
+
+/* ==============================
+   NAV PROFILE IMAGE
+   ============================== */
+
+.profile-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    padding: 0;
+
+    background: rgba(255, 255, 255, 0.1);
+
+    border: 2px solid rgba(255, 255, 255, 0.8);
+
+    transition: 0.3s;
+
+    text-decoration: none;
+}
+
+.profile-nav:hover {
+    transform: scale(1.08);
+    border-color: #00aa00;
+}
+
+.profile-nav img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
