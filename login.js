@@ -1,6 +1,33 @@
 //Login Request
 const loginForm = document.getElementById("loginForm");
 
+const passwordInput =
+    document.getElementById("password");
+
+const togglePassword =
+    document.getElementById("togglePassword");
+
+
+togglePassword.addEventListener("click", () => {
+
+    if (passwordInput.type === "password") {
+
+        passwordInput.type = "text";
+
+        togglePassword.src = "eye-off.png";
+        togglePassword.alt = "Hide password";
+
+    } else {
+
+        passwordInput.type = "password";
+
+        togglePassword.src = "eye.png";
+        togglePassword.alt = "Show password";
+
+    }
+
+});
+
 loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 

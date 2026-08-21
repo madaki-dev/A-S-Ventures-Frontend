@@ -30,7 +30,11 @@
       <form id="loginForm">
         <input type="email" placeholder="Email Address" id="email" required />
 
-        <input type="password" placeholder="Password" id="password" required />
+        <div class="password-wrapper">
+          <input type="password" placeholder="Password" id="password" required />
+
+          <img src="Frontend/view.png" alt="Show password" id="togglePassword" class="password-eye" />
+        </div>
 
         <button type="submit">Login</button>
       </form>
